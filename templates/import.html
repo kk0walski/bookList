@@ -1,114 +1,41 @@
 {% extends "base.html" %}
 
 {% block content %}
-
 <div class="row">
     <div class="col-lg-3">
-        <form action="#" onsubmit="logSubmit()" id="import">
+        <form action="" method="post" novalidate>
+            {{ form.hidden_tag() }}
             <div class="mb-3">
-                <lablel for="q" class="form-label">Search field</lablel>
-                <input type="text" class="form-control" name='q' id="q" placeholder="Search">
+                {{ form.search.label(class_="form-label") }}
+                {{ form.search(size=32, class_="form-control") }}
             </div>
             <div class="mb-3">
-                <lablel for="titleSeach" class="form-label">Title</lablel>
-                <input type="text" class="form-control" name='intitle' id="titleSeach" placeholder="title">
+                {{ form.title.label(class_="form-label") }}
+                {{ form.title(size=32, class_="form-control") }}
             </div>
             <div class="mb-3">
-                <lablel for="authorSearch" class="form-label">Author</lablel>
-                <input type="text" class="form-control" name='inauthor' id="authorSearch" placeholder="author">
+                {{ form.author.label(class_="form-label") }}
+                {{ form.author(size=32, class_="form-control") }}
             </div>
             <div class="mb-3">
-                <lablel for="publisher" class="form-label">Publisher</lablel>
-                <input type="text" class="form-control" name='inpublisher' id="publisher" placeholder="publisher">
+                {{ form.publisher.label(class_="form-label") }}
+                {{ form.publisher(size=32, class_="form-control") }}
             </div>
             <div class="mb-3">
-                <lablel for="subject" class="form-label">Subject</lablel>
-                <input type="text" class="form-control" name='subject' id="subject" placeholder="subject">
+                {{ form.subject.label(class_="form-label") }}
+                {{ form.subject(size=32, class_="form-control") }}
             </div>
             <div class="mb-3">
-                <lablel for="isbn" class="form-label">ISBN</lablel>
-                <input type="text" class="form-control" name='isbn' id="isbn" placeholder="ISBN">
+                {{ form.isbn.label(class_="form-label") }}
+                {{ form.isbn(size=13, class_="form-control") }}
             </div>
-            <button type="submit" class="btn btn-primary">Search</button>
+            {{ form.submit(class_="btn btn-primary") }}
         </form>
     </div>
     <div class="col-lg-9">
-        <p id="log"></p>
+        <ul class="list-group" id='books'>
+
+        </ul>
     </div>
 </div>
-
-<script type="text/javascript">
-
-    function get_values(form) {
-        return Object.values(form).reduce((obj, field) => { obj[field.name] = field.value; return obj }, {})
-    }
-
-    function clean(obj) {
-        for (var propName in obj) {
-            if (propName !== 'q') {
-                if (obj[propName] === null || obj[propName] === undefined || obj[propName] === '') {
-                    delete obj[propName];
-                }
-            }
-        }
-        return obj
-    }
-
-    function map_book(book){
-        return {
-            'title': book.volumeInfo.title,
-            'author': book.volumeInfo.authors.join(','),
-            'publishedDate': book.volumeInfo.publishedDate,
-            'isbn': book.volumeInfo.industryIdentifiers[0].identifier,
-            'pages': book.volumeInfo.pageCount,
-            'language': book.volumeInfo.language,
-            'frontPage': book.volumeInfo.imageLinks.thumbnail
-        }
-    }
-
-    function show_books(data){
-        books = data.items.map(map_book)
-        for (var book of books){
-
-        }
-    }
-
-    function buildUrl(form) {
-        let url = 'https://www.googleapis.com/books/v1/volumes?'
-        let values = get_values(form)
-        values = clean(values)
-        let params = new URLSearchParams(values)
-        let params_string = params.toString()
-        if (params.get('q') === '') {
-            params_string = params_string.replace('&', '')
-        }
-        params_string = params_string.replaceAll('&', '+')
-        params_string = params_string.replaceAll('=', ':')
-        params_string = params_string.replace(':', '=')
-        url = url + params_string
-        return url
-    }
-
-    function logSubmit() {
-        const url = buildUrl(event.target)
-        event.preventDefault();
-        fetch(url).then(
-            function (response) {
-                if (response.status !== 200) {
-                    console.log('Looks like there was a problem. Status Code: ' +
-                        response.status);
-                    return;
-                }
-
-                // Examine the text in the response
-                response.json().then(show_books(data));
-            }
-        )
-            .catch(function (err) {
-                console.log('Fetch Error :-S', err);
-            });
-    }
-
-</script>
-
 {% endblock %}
