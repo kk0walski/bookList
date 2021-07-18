@@ -1,4 +1,4 @@
-from flask import Flask, render_template, flash, redirect
+from flask import Flask, render_template
 from forms import SearchForm
 from config import Config
 from urllib.parse import urlencode
@@ -53,13 +53,16 @@ def import_books():
             'isbn': form.subject.data,
         }
         query_data = dict(
-            filter(lambda elem: elem[1] != '', query_data.items()))
+            filter(lambda elem: elem[1] != '' or elem[0] == 'q', query_data.items()))
         querystring = urlencode(query_data)
         querystring = querystring.replace('&', '+')
         querystring = querystring.replace('=', ':')
         querystring = querystring.replace(':', '=', 1)
-        books = get_request(
-            'https://www.googleapis.com/books/v1/volumes?' + querystring)
+        if query_data['q'] == '':
+            querystring = querystring.replace('+', '', 1)
+        url = 'https://www.googleapis.com/books/v1/volumes?' + querystring
+        print(url)
+        books = get_request(url)
         return render_template('import.html', form=form, books=books)
     return render_template('import.html', form=form)
 
