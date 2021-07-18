@@ -15,28 +15,23 @@ def index():
 
 
 def map_book(book):
-    identifiers_field = book.get('volumeInfo').get('industryIdentifiers')
-    if not identifiers_field == None:
-        identifier = identifiers_field[0].get('identifier')
-    else:
-        identifier = "0000000000"
     return {
-        'title': book.get('volumeInfo').get('title') or 'no title',
-        'author': book.get('volumeInfo').get('authors').join(',') or 'annonymous',
-        'date': book.get('volumeInfo').get('publishedDate') or 'none',
-        'isbn': identifier,
-        'pages': book.get('volumeInfo').get('pageCount') or 0,
-        'language': book.get('volumeInfo').get('language') or 'none',
-        'frontPage': book.get('volumeInfo').get('imageLinks').get('thumbnail') or '#'
+        'title': book.get('volumeInfo', {}).get('title', 'no_title'),
+        'author': ','.join(book.get('volumeInfo', {}).get('authors', ['annonymous'])),
+        'date': book.get('volumeInfo', {}).get('publishedDate', 'no-date'),
+        'isbn': book.get('volumeInfo', {}).get('industryIdentifiers', [{'identifier': "0000000000"}])[0].get('identifier'),
+        'pages': book.get('volumeInfo', {}).get('pageCount', 0),
+        'language': book.get('volumeInfo', {}).get('language', 'no-lang'),
+        'frontPage': book.get('volumeInfo', {}).get('imageLinks', {}).get('thumbnail', '#')
     }
 
 
 def get_request(url):
     response = requests.get(url)
     if response.status_code == 200:
-        data = json.load(response.json())
+        data = response.json()
         items = data['items']
-        reasult = items.map(map_book, items)
+        reasult = map(map_book, items)
         return reasult
 
 
