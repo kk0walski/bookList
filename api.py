@@ -17,12 +17,12 @@ def index():
 def map_book(book):
     return {
         'title': book.get('volumeInfo', {}).get('title', 'no_title'),
-        'author': ','.join(book.get('volumeInfo', {}).get('authors', ['annonymous'])),
+        'author': ', '.join(book.get('volumeInfo', {}).get('authors', ['annonymous'])),
         'date': book.get('volumeInfo', {}).get('publishedDate', 'no-date'),
         'isbn': book.get('volumeInfo', {}).get('industryIdentifiers', [{'identifier': "0000000000"}])[0].get('identifier'),
         'pages': book.get('volumeInfo', {}).get('pageCount', 0),
         'language': book.get('volumeInfo', {}).get('language', 'no-lang'),
-        'frontPage': book.get('volumeInfo', {}).get('imageLinks', {}).get('thumbnail', '#')
+        'frontPage': book.get('volumeInfo', {}).get('imageLinks', {}).get('thumbnail', '...')
     }
 
 
@@ -56,7 +56,6 @@ def import_books():
         if query_data['q'] == '':
             querystring = querystring.replace('+', '', 1)
         url = 'https://www.googleapis.com/books/v1/volumes?' + querystring
-        print(url)
         books = get_request(url)
         return render_template('import.html', form=form, books=books)
     return render_template('import.html', form=form)
