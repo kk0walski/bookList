@@ -6,8 +6,8 @@
     <div class="col-lg-3">
         <form action="#" onsubmit="logSubmit()" id="import">
             <div class="mb-3">
-                <lablel for="search" class="form-label">Search field</lablel>
-                <input type="text" class="form-control" name='search' id="search" placeholder="Search">
+                <lablel for="q" class="form-label">Search field</lablel>
+                <input type="text" class="form-control" name='q' id="q" placeholder="Search">
             </div>
             <div class="mb-3">
                 <lablel for="titleSeach" class="form-label">Title</lablel>
@@ -45,24 +45,48 @@
 
     function clean(obj) {
         for (var propName in obj) {
-            if (obj[propName] === null || obj[propName] === undefined || obj[propName] === '') {
-                delete obj[propName];
+            if (propName !== 'q'){
+                if (obj[propName] === null || obj[propName] === undefined || obj[propName] === '') {
+                    delete obj[propName];
+                }
             }
         }
         return obj
     }
 
-    function buildUrl(form){
-        let url = 'https://www.googleapis.com/books/v1/volumes?q='
-        let params = get_values(form)
-        params = clean(params)
-        if (params['search'] !== undefined){
-            url += params['search'] + '+'
-            delete params['search']
+    function querystring(dictionary){
+        let querystring = new URLSearchParams()
+        for (var propName in dictionary) {
+            if (propName !== 'q'){
+                let params_list = dictionary[propName].split(' ')
+                if (params_list.length > 1){
+                    for (var value of params_list){
+                        querystring.append(propName, value)
+                    }
+                }
+                else{
+                    querystring.append(propName, dictionary[propName])
+                }
+            }else{
+                querystring.append(propName, dictionary[propName])
+            }
         }
-        let paramsString = new URLSearchParams(params).toString().replaceAll('&', '+').replaceAll('=', ':')
-        const new_url = url + paramsString
-        return new_url
+        return querystring
+    }
+
+    function buildUrl(form){
+        let url = 'https://www.googleapis.com/books/v1/volumes?'
+        let values = get_values(form)
+        values = clean(values)
+        let params = querystring(values)
+        let params_string = params.toString()
+        if (params.get('q') === ''){
+            params_string = params_string.replace('&', '')
+        }
+        params_string = params_string.replaceAll('&', '+')
+        params_string = params_string.replaceAll('=', ':')
+        params_string = params_string.replace(':', '=')
+        console.log(params_string)
     }
     
     function logSubmit() {
