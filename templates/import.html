@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-3">
+        <form action="#" onsubmit="logSubmit()" id="import">
+            <div class="mb-3">
+                <lablel for="titleSeach" class="form-label">Title</lablel>
+                <input type="text" class="form-control" name='title' id="titleSeach" placeholder="title">
+            </div>
+            <div class="mb-3">
+                <lablel for="authorSearch" class="form-label">Author</lablel>
+                <input type="text" class="form-control" name='author' id="authorSearch" placeholder="author">
+            </div>
+            <div class="mb-3">
+                <lablel for="publisher" class="form-label">Publisher</lablel>
+                <input type="text" class="form-control" name='publisher' id="publisher" placeholder="publisher">
+            </div>
+            <div class="mb-3">
+                <lablel for="subject" class="form-label">Subject</lablel>
+                <input type="text" class="form-control" name='subject' id="subject" placeholder="subject">
+            </div>
+            <div class="mb-3">
+                <lablel for="isbn" class="form-label">ISBN</lablel>
+                <input type="text" class="form-control" name='isbn' id="isbn" placeholder="ISBN">
+            </div>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+    </div>
+    <div class="col-lg-9">
+        <p id="log"></p>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function writeResponse(resp){
+        var responseText;
+        if (resp.error && resp.error.errors[0].debugInfo == 'QuotaState: BLOCKED') {
+        responseText = 'Invalid API key provided. Please replace the "apiKey" value with your own.';
+        } else {
+            console.log(resp)
+        }
+    }
+    
+    function logSubmit() {
+        let url = 'https://www.googleapis.com/books/v1/volumes'
+        let fields = event.target.elements
+        let title = fields.title.value
+        let author = fields.author.value
+        let publisher = fields.publisher.value
+        let subject = fields.subject.value
+        let isbn = fields.isbn.value
+        event.preventDefault();
+        console.log(title)
+        console.log(author)
+        // let restRequest = gapi.client.request({
+        //     'path': 'https://www.googleapis.com/books/v1/volumes',
+        //     'params': {'intitle': title}
+        // });
+        // writeResponse(restRequest)
+    }
+    
+    </script>
+
+{% endblock %}

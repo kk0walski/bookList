@@ -6,6 +6,10 @@ app = Flask(__name__)
 def index():
     return render_template('index.html', books=get_books())
 
+@app.route('/import', methods=['GET', 'POST'])
+def import_books():
+    return render_template('import.html')
+
 def get_books():
     books = [
         {
