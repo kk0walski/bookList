@@ -54,31 +54,11 @@
         return obj
     }
 
-    function querystring(dictionary){
-        let querystring = new URLSearchParams()
-        for (var propName in dictionary) {
-            if (propName !== 'q'){
-                let params_list = dictionary[propName].split(' ')
-                if (params_list.length > 1){
-                    for (var value of params_list){
-                        querystring.append(propName, value)
-                    }
-                }
-                else{
-                    querystring.append(propName, dictionary[propName])
-                }
-            }else{
-                querystring.append(propName, dictionary[propName])
-            }
-        }
-        return querystring
-    }
-
     function buildUrl(form){
         let url = 'https://www.googleapis.com/books/v1/volumes?'
         let values = get_values(form)
         values = clean(values)
-        let params = querystring(values)
+        let params = new URLSearchParams(values)
         let params_string = params.toString()
         if (params.get('q') === ''){
             params_string = params_string.replace('&', '')
@@ -86,7 +66,8 @@
         params_string = params_string.replaceAll('&', '+')
         params_string = params_string.replaceAll('=', ':')
         params_string = params_string.replace(':', '=')
-        console.log(params_string)
+        url = url + params_string
+        return url
     }
     
     function logSubmit() {
