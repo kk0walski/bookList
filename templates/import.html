@@ -6,16 +6,20 @@
     <div class="col-lg-3">
         <form action="#" onsubmit="logSubmit()" id="import">
             <div class="mb-3">
+                <lablel for="search" class="form-label">Search field</lablel>
+                <input type="text" class="form-control" name='search' id="search" placeholder="Search">
+            </div>
+            <div class="mb-3">
                 <lablel for="titleSeach" class="form-label">Title</lablel>
-                <input type="text" class="form-control" name='title' id="titleSeach" placeholder="title">
+                <input type="text" class="form-control" name='intitle' id="titleSeach" placeholder="title">
             </div>
             <div class="mb-3">
                 <lablel for="authorSearch" class="form-label">Author</lablel>
-                <input type="text" class="form-control" name='author' id="authorSearch" placeholder="author">
+                <input type="text" class="form-control" name='inauthor' id="authorSearch" placeholder="author">
             </div>
             <div class="mb-3">
                 <lablel for="publisher" class="form-label">Publisher</lablel>
-                <input type="text" class="form-control" name='publisher' id="publisher" placeholder="publisher">
+                <input type="text" class="form-control" name='inpublisher' id="publisher" placeholder="publisher">
             </div>
             <div class="mb-3">
                 <lablel for="subject" class="form-label">Subject</lablel>
@@ -34,26 +38,37 @@
 </div>
 
 <script type="text/javascript">
-    function writeResponse(resp){
-        var responseText;
-        if (resp.error && resp.error.errors[0].debugInfo == 'QuotaState: BLOCKED') {
-        responseText = 'Invalid API key provided. Please replace the "apiKey" value with your own.';
-        } else {
-            console.log(resp)
+
+    function get_values(form){
+        return Object.values(form).reduce((obj,field) => { obj[field.name] = field.value; return obj }, {})
+    }
+
+    function clean(obj) {
+        for (var propName in obj) {
+            if (obj[propName] === null || obj[propName] === undefined || obj[propName] === '') {
+                delete obj[propName];
+            }
         }
+        return obj
+    }
+
+    function buildUrl(form){
+        let url = 'https://www.googleapis.com/books/v1/volumes?q='
+        let params = get_values(form)
+        params = clean(params)
+        if (params['search'] !== undefined){
+            url += params['search'] + '+'
+            delete params['search']
+        }
+        let paramsString = new URLSearchParams(params).toString().replaceAll('&', '+').replaceAll('=', ':')
+        const new_url = url + paramsString
+        return new_url
     }
     
     function logSubmit() {
-        let url = 'https://www.googleapis.com/books/v1/volumes'
-        let fields = event.target.elements
-        let title = fields.title.value
-        let author = fields.author.value
-        let publisher = fields.publisher.value
-        let subject = fields.subject.value
-        let isbn = fields.isbn.value
+        const url = buildUrl(event.target)
         event.preventDefault();
-        console.log(title)
-        console.log(author)
+        console.log(url)
         // let restRequest = gapi.client.request({
         //     'path': 'https://www.googleapis.com/books/v1/volumes',
         //     'params': {'intitle': title}
