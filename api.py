@@ -23,7 +23,7 @@ def map_book(book):
     return {
         'title': book.get('volumeInfo').get('title') or 'no title',
         'author': book.get('volumeInfo').get('authors').join(',') or 'annonymous',
-        'publishedDate': book.get('volumeInfo').get('publishedDate') or 'none',
+        'date': book.get('volumeInfo').get('publishedDate') or 'none',
         'isbn': identifier,
         'pages': book.get('volumeInfo').get('pageCount') or 0,
         'language': book.get('volumeInfo').get('language') or 'none',
@@ -50,7 +50,7 @@ def import_books():
             'inauthor': form.author.data,
             'inpublisher': form.publisher.data,
             'subject': form.subject.data,
-            'isbn': form.subject.data
+            'isbn': form.subject.data,
         }
         query_data = dict(
             filter(lambda elem: elem[1] != '', query_data.items()))

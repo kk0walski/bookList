@@ -33,9 +33,26 @@
         </form>
     </div>
     <div class="col-lg-9">
+        {% if books %}
         <ul class="list-group" id='books'>
-
+            {% for book in books %}
+            <a href="#"
+                class="list-group-item list-group-item-action d-flex justify-content-between align-items-center disabled">
+                <div class="flex-column">
+                    {{ book.title }} <small>by {{ book.author }}</small>
+                    <p><small>Pub date: {{ book.date }}</small></p>
+                    <p>ISBN: {{ book.isbn }}</p>
+                    <span class="badge bg-primary">pageCount: {{ book.pages }}</span>
+                    <span class="badge bg-secondary">lang: {{ book.language }}</span>
+                </div>
+                <figure class="figure">
+                    <img src="{{ book.frontPage }}" class="img-thumbnail" alt="quixote">
+                </figure>
+            </a>
+            {% endfor %}
         </ul>
+        {% endif %}
+
     </div>
 </div>
 {% endblock %}
