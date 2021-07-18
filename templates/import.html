@@ -39,13 +39,13 @@
 
 <script type="text/javascript">
 
-    function get_values(form){
-        return Object.values(form).reduce((obj,field) => { obj[field.name] = field.value; return obj }, {})
+    function get_values(form) {
+        return Object.values(form).reduce((obj, field) => { obj[field.name] = field.value; return obj }, {})
     }
 
     function clean(obj) {
         for (var propName in obj) {
-            if (propName !== 'q'){
+            if (propName !== 'q') {
                 if (obj[propName] === null || obj[propName] === undefined || obj[propName] === '') {
                     delete obj[propName];
                 }
@@ -54,13 +54,32 @@
         return obj
     }
 
-    function buildUrl(form){
+    function map_book(book){
+        return {
+            'title': book.volumeInfo.title,
+            'author': book.volumeInfo.authors.join(','),
+            'publishedDate': book.volumeInfo.publishedDate,
+            'isbn': book.volumeInfo.industryIdentifiers[0].identifier,
+            'pages': book.volumeInfo.pageCount,
+            'language': book.volumeInfo.language,
+            'frontPage': book.volumeInfo.imageLinks.thumbnail
+        }
+    }
+
+    function show_books(data){
+        books = data.items.map(map_book)
+        for (var book of books){
+
+        }
+    }
+
+    function buildUrl(form) {
         let url = 'https://www.googleapis.com/books/v1/volumes?'
         let values = get_values(form)
         values = clean(values)
         let params = new URLSearchParams(values)
         let params_string = params.toString()
-        if (params.get('q') === ''){
+        if (params.get('q') === '') {
             params_string = params_string.replace('&', '')
         }
         params_string = params_string.replaceAll('&', '+')
@@ -69,18 +88,27 @@
         url = url + params_string
         return url
     }
-    
+
     function logSubmit() {
         const url = buildUrl(event.target)
         event.preventDefault();
-        console.log(url)
-        // let restRequest = gapi.client.request({
-        //     'path': 'https://www.googleapis.com/books/v1/volumes',
-        //     'params': {'intitle': title}
-        // });
-        // writeResponse(restRequest)
+        fetch(url).then(
+            function (response) {
+                if (response.status !== 200) {
+                    console.log('Looks like there was a problem. Status Code: ' +
+                        response.status);
+                    return;
+                }
+
+                // Examine the text in the response
+                response.json().then(show_books(data));
+            }
+        )
+            .catch(function (err) {
+                console.log('Fetch Error :-S', err);
+            });
     }
-    
-    </script>
+
+</script>
 
 {% endblock %}
