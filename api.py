@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-from forms import SearchForm, FilterForm
+from forms import SearchForm, FilterForm, BookForm
 from config import Config
 from urllib.parse import urlencode
 import json
@@ -9,8 +9,25 @@ app = Flask(__name__)
 app.config.from_object(Config)
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/')
 def index():
+    return render_template('index.html')
+
+
+@app.route('/books/<string:isbn>', methods=["PUT", "GET"])
+def book(isbn):
+    form = BookForm()
+    return render_template('book.html', form=form)
+
+
+@app.route('/books/', methods=["POST", "GET"])
+def add_book():
+    form = BookForm()
+    return render_template('book.html', form=form)
+
+
+@app.route('/books', methods=['GET', 'POST'])
+def books():
     form = FilterForm()
     if form.validate_on_submit():
         query_data = {
@@ -20,8 +37,8 @@ def index():
             'date_from': form.startdate_field.data,
             'date_to': form.enddate_field.data,
         }
-        return render_template('index.html', form=form, books=get_books())
-    return render_template('index.html', form=form, books=get_books())
+        return render_template('books.html', form=form, books=get_books())
+    return render_template('books.html', form=form, books=get_books())
 
 
 def get_isbn(book):
@@ -67,7 +84,7 @@ def get_request(url):
 
 @app.route('/import', methods=['GET', 'POST'])
 def import_books():
-    form = SearchForm(request.form)
+    form = SearchForm()
     if form.validate_on_submit():
         query_data = {
             'q': form.search.data,

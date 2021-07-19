@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="row">
+    <form action="" method="POST" novalidate>
+        {{ form.hidden_tag() }}
+        <div class="mb-3">
+            {{ form.isbn.label(class_="form-label") }}
+            {{ form.isbn(size=32, class_="form-control") }}
+            {% if form.isbn.errors %}
+            {% for error in form.isbn.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            {{ form.title.label(class_="form-label") }}
+            {{ form.title(size=32, class_="form-control") }}
+            {% if form.title.errors %}
+            {% for error in form.title.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            {{ form.author.label(class_="form-label") }}
+            {{ form.author(size=32, class_="form-control") }}
+            {% if form.author.errors %}
+            {% for error in form.author.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            {{ form.pubDate.label(class_="form-label") }}
+            {{ form.pubDate(size=32, class_="form-control") }}
+            {% if form.pubDate.errors %}
+            {% for error in form.pubDate.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            {{ form.pages.label(class_="form-label") }}
+            {{ form.pages(size=32, class_="form-control") }}
+            {% if form.pages.errors %}
+            {% for error in form.pages.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            {{ form.fronPage.label(class_="form-label") }}
+            {{ form.fronPage(size=32, class_="form-control") }}
+            {% if form.fronPage.errors %}
+            {% for error in form.fronPage.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            {{ form.language.label(class_="form-label") }}
+            {{ form.language(size=32, class_="form-control") }}
+            {% if form.language.errors %}
+            {% for error in form.language.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+            {% endif %}
+        </div>
+        {{ form.submit(class_="btn btn-primary") }}
+    </form>
+</div>
+
+{% endblock %}

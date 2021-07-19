@@ -2,75 +2,45 @@
 
 {% block content %}
 <div class="row">
-    <div class="col-lg-3">
-        <form action="" method="POST" novalidate>
-            {{ form.hidden_tag() }}
-            <div class="mb-3">
-                {{ form.title.label(class_="form-label") }}
-                {{ form.title(size=32, class_="form-control") }}
-                {% if form.title.errors %}
-                {% for error in form.title.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-                {% endfor %}
-                {% endif %}
-            </div>
-            <div class="mb-3">
-                {{ form.author.label(class_="form-label") }}
-                {{ form.author(size=32, class_="form-control") }}
-                {% if form.author.errors %}
-                {% for error in form.author.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-                {% endfor %}
-                {% endif %}
-            </div>
-            <div class="mb-3">
-                {{ form.language.label(class_="form-label") }}
-                {{ form.language(size=32, class_="form-control") }}
-                {% if form.language.errors %}
-                {% for error in form.language.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-                {% endfor %}
-                {% endif %}
-            </div>
-            <div class="mb-3">
-                {{ form.startdate_field.label(class_="form-label") }}
-                {{ form.startdate_field(class_="form-control") }}
-                {% if form.startdate_field.errors %}
-                {% for error in form.startdate_field.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-                {% endfor %}
-                {% endif %}
-            </div>
-            <div class="mb-3">
-                {{ form.enddate_field.label(class_="form-label") }}
-                {{ form.enddate_field(class_="form-control") }}
-                {% if form.enddate_field.errors %}
-                {% for error in form.enddate_field.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-                {% endfor %}
-                {% endif %}
-            </div>
-            {{ form.submit(class_="btn btn-primary") }}
-        </form>
-    </div>
-    <div class="col-lg-9">
-        <ul class="list-group">
-            {% for book in books %}
-            <a href="#"
-                class="list-group-item list-group-item-action d-flex justify-content-between align-items-center disabled">
-                <div class="flex-column">
-                    {{ book.title }} <small>by {{ book.author }}</small>
-                    <p><small>Pub date: {{ book.date }}</small></p>
-                    <p>ISBN: {{ book.isbn }}</p>
-                    <span class="badge bg-primary">pageCount: {{ book.pages }}</span>
-                    <span class="badge bg-secondary">lang: {{ book.language }}</span>
-                </div>
-                <figure class="figure">
-                    <img src="{{ book.frontPage }}" class="img-thumbnail" alt="quixote">
-                </figure>
-            </a>
-            {% endfor %}
-        </ul>
-    </div>
+    <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed enim sed nunc facilisis molestie. Morbi
+        scelerisque metus vitae tellus viverra malesuada. Duis viverra, urna cursus imperdiet laoreet, mauris mauris
+        vehicula ante, non luctus diam nisi non nibh. Nulla a egestas ex. Maecenas fringilla magna dui. Vestibulum ac
+        tortor a dui porta suscipit ac et nibh. Sed ac mollis leo, non fringilla urna. Curabitur vestibulum nisl a nibh
+        vestibulum vestibulum. Aliquam erat volutpat. Aliquam tincidunt fringilla facilisis. Proin nisl lacus, tempus
+        sed ornare sagittis, dictum in mi. Nullam ornare ultrices neque, ac placerat urna tempor eu. Proin eleifend,
+        nunc vitae porttitor tristique, leo odio imperdiet lorem, a euismod nisi massa vitae dui.
+    </p>
+    <p>
+        Phasellus egestas nulla ligula, id rutrum est accumsan vitae. Nunc vel velit luctus, auctor velit ac, ultricies
+        lacus. Quisque lectus sem, ultrices efficitur nulla nec, hendrerit dignissim turpis. Nullam auctor lacus vel
+        odio eleifend cursus. In suscipit rhoncus quam. Fusce faucibus turpis id erat varius tincidunt. Suspendisse
+        potenti. Aliquam convallis dolor justo, nec tempor mi rutrum sit amet. Lorem ipsum dolor sit amet, consectetur
+        adipiscing elit. Nam ut auctor diam. Suspendisse malesuada tortor a enim volutpat, nec commodo urna interdum.
+        Suspendisse ante urna, sagittis eget commodo eu, imperdiet viverra magna.
+    </p>
+    <p>
+        Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Donec nulla leo,
+        vehicula id pellentesque ut, tempus quis magna. Class aptent taciti sociosqu ad litora torquent per conubia
+        nostra, per inceptos himenaeos. Fusce ac hendrerit nisl. Nulla sed consectetur enim. Cras accumsan, tortor eget
+        fringilla sagittis, nulla justo dapibus mi, ut malesuada ipsum nunc a tortor. Pellentesque risus erat, laoreet
+        vel tempor at, tincidunt vitae risus. Proin mattis eleifend erat quis ultricies. Nullam non eleifend lorem.
+        Integer suscipit auctor consequat. Duis lacinia, enim sit amet imperdiet rhoncus, eros tortor suscipit lorem,
+        vel dapibus mi dui sed lorem. Proin convallis ipsum tristique, fringilla magna vitae, vulputate lectus. Fusce
+        quis velit consectetur, aliquam nibh tincidunt, lacinia dolor. Sed elementum pellentesque porttitor. Nam in
+        purus at ligula bibendum mattis. Fusce pretium varius ex, eget iaculis urna euismod et.
+    </p>
+    <p>
+        Proin malesuada odio sit amet auctor molestie. Aliquam nisl tortor, consequat sed orci in, efficitur varius mi.
+        Phasellus feugiat tellus ac velit ornare fermentum. Donec mauris eros, condimentum ut lorem ac, aliquam volutpat
+        velit. Sed porttitor enim blandit lacus facilisis mattis. Vestibulum efficitur dictum dolor. Fusce facilisis
+        ornare viverra. Aliquam malesuada erat id erat laoreet, ac viverra nibh posuere.
+    </p>
+    <p>
+        Maecenas nec purus bibendum, dictum lacus non, euismod arcu. Suspendisse ac volutpat arcu. Pellentesque a lacus
+        interdum, ullamcorper tortor eu, convallis ligula. Vivamus non vestibulum felis. Donec fringilla ligula nibh,
+        non fermentum neque malesuada nec. Nulla vel tortor efficitur, pretium nulla tempus, lacinia velit. Maecenas
+        consequat dictum scelerisque. Proin semper odio non nisi finibus luctus. Integer eget fringilla tellus.
+    </p>
 </div>
 {% endblock %}

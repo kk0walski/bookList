@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-3">
+        <form action="" method="POST" novalidate>
+            {{ form.hidden_tag() }}
+            <div class="mb-3">
+                {{ form.title.label(class_="form-label") }}
+                {{ form.title(size=32, class_="form-control") }}
+                {% if form.title.errors %}
+                {% for error in form.title.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+                {% endif %}
+            </div>
+            <div class="mb-3">
+                {{ form.author.label(class_="form-label") }}
+                {{ form.author(size=32, class_="form-control") }}
+                {% if form.author.errors %}
+                {% for error in form.author.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+                {% endif %}
+            </div>
+            <div class="mb-3">
+                {{ form.language.label(class_="form-label") }}
+                {{ form.language(size=32, class_="form-control") }}
+                {% if form.language.errors %}
+                {% for error in form.language.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+                {% endif %}
+            </div>
+            <div class="mb-3">
+                {{ form.startdate_field.label(class_="form-label") }}
+                {{ form.startdate_field(class_="form-control") }}
+                {% if form.startdate_field.errors %}
+                {% for error in form.startdate_field.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+                {% endif %}
+            </div>
+            <div class="mb-3">
+                {{ form.enddate_field.label(class_="form-label") }}
+                {{ form.enddate_field(class_="form-control") }}
+                {% if form.enddate_field.errors %}
+                {% for error in form.enddate_field.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+                {% endif %}
+            </div>
+            {{ form.submit(class_="btn btn-primary") }}
+        </form>
+    </div>
+    <div class="col-lg-9">
+        <ul class="list-group">
+            {% for book in books %}
+            <a href="#"
+                class="list-group-item list-group-item-action d-flex justify-content-between align-items-center disabled">
+                <div class="flex-column">
+                    {{ book.title }} <small>by {{ book.author }}</small>
+                    <p><small>Pub date: {{ book.date }}</small></p>
+                    <p>ISBN: {{ book.isbn }}</p>
+                    <span class="badge bg-primary">pageCount: {{ book.pages }}</span>
+                    <span class="badge bg-secondary">lang: {{ book.language }}</span>
+                </div>
+                <figure class="figure">
+                    <img src="{{ book.frontPage }}" class="img-thumbnail" alt="quixote">
+                </figure>
+            </a>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}
