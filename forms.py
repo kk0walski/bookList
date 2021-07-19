@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import SubmitField, StringField
-from wtforms.validators import DataRequired, ValidationError, Regexp, Optional
+from wtforms.validators import DataRequired, ValidationError, Regexp, Optional, URL
 from wtforms.fields.html5 import URLField, DateField, IntegerField, URLField
 
 
@@ -12,7 +12,7 @@ class BookForm(FlaskForm):
     pubDate = DateField("Publication date",
                         format='%Y-%m-%d', validators=[Optional()])
     pages = IntegerField("Pages number", validators=[Optional()])
-    fronPage = URLField("frontPage", render_kw={
+    fronPage = URLField("frontPage", validators=[URL()], render_kw={
                         "placeholder": "http://www.example.com"})
     language = StringField("Language", render_kw={
         "placeholder": "un"})
