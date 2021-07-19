@@ -24,20 +24,22 @@ def get_isbn(book):
         if identifiers_dict.get('ISBN_10'):
             return identifiers_dict.get('ISBN_10')
         else:
-            return identifiers[0].get('identifier', "0000000000")
+            return identifiers[0].get('identifier')
     else:
-        return "0000000000"
+        return None
 
 
 def map_book(book):
-    return get_isbn(book), {
-        'title': book.get('volumeInfo', {}).get('title', 'no_title'),
-        'author': ', '.join(book.get('volumeInfo', {}).get('authors', ['annonymous'])),
-        'date': book.get('volumeInfo', {}).get('publishedDate', 'no-date'),
-        'pages': book.get('volumeInfo', {}).get('pageCount', 0),
-        'language': book.get('volumeInfo', {}).get('language', 'no-lang'),
-        'frontPage': book.get('volumeInfo', {}).get('imageLinks', {}).get('thumbnail', '#')
-    }
+    isbn = get_isbn(book)
+    if isbn:
+        return isbn, {
+            'title': book.get('volumeInfo', {}).get('title', 'no_title'),
+            'author': ', '.join(book.get('volumeInfo', {}).get('authors', ['annonymous'])),
+            'date': book.get('volumeInfo', {}).get('publishedDate', 'no-date'),
+            'pages': book.get('volumeInfo', {}).get('pageCount', 0),
+            'language': book.get('volumeInfo', {}).get('language', 'no-lang'),
+            'frontPage': book.get('volumeInfo', {}).get('imageLinks', {}).get('thumbnail', '#')
+        }
 
 
 def get_request(url):
@@ -48,7 +50,8 @@ def get_request(url):
         items = data['items']
         for book in items:
             key, book = map_book(book)
-            reasult[key] = book
+            if key:
+                reasult[key] = book
         return [(lambda d: d.update(isbn=key) or d)(val) for (key, val) in reasult.items()]
 
 
