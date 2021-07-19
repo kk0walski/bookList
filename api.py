@@ -13,17 +13,14 @@ app.config.from_object(Config)
 def index():
     form = FilterForm()
     if form.validate_on_submit():
-        if form.validate_date_to_field(form.date_to_field.data):
-            query_data = {
-                'title': form.title.data,
-                'author': form.author.data,
-                'language': form.language.data,
-                'date_from': form.date_from.data,
-                'date_to': form.date_to.data,
-            }
-            return render_template('index.html', form=form, books=get_books())
-        else:
-            return render_template('index.html', form=form)
+        query_data = {
+            'title': form.title.data,
+            'author': form.author.data,
+            'language': form.language.data,
+            'date_from': form.startdate_field.data,
+            'date_to': form.enddate_field.data,
+        }
+        return render_template('index.html', form=form, books=get_books())
     return render_template('index.html', form=form, books=get_books())
 
 

@@ -1,6 +1,4 @@
-from datetime import date
 from flask_wtf import FlaskForm
-from wtforms_components import DateRange
 from wtforms import SubmitField, StringField, IntegerField
 from wtforms.validators import DataRequired, url, ValidationError
 from wtforms.fields.html5 import URLField, DateField
@@ -31,14 +29,12 @@ class FilterForm(FlaskForm):
     title = StringField("Title")
     author = StringField("Author")
     language = StringField("language")
-    startdate_field = DateField("Date from", validators=[
-                                DateRange(max=date.today())], format='%Y-%m-%d')
-    enddate_field = DateField("Date To", validators=[
-        DateRange(max=date.today())], format='%Y-%m-%d')
+    startdate_field = DateField("Date from", format='%Y-%m-%d')
+    enddate_field = DateField("Date To", format='%Y-%m-%d')
     submit = SubmitField("FILTER")
 
     def validate_enddate_field(form, field):
-        if form.startdate_field.data:
+        if form.startdate_field.data and form.enddate_field.data:
             if field.data < form.startdate_field.data:
                 raise ValidationError(
                     "End date must not be earlier than start date.")
