@@ -14,7 +14,6 @@ def index():
     form = FilterForm()
     if form.validate_on_submit():
         if form.validate_date_to_field(form.date_to_field.data):
-            app.logger.info("DUPA1")
             query_data = {
                 'title': form.title.data,
                 'author': form.author.data,
