@@ -14,12 +14,26 @@ def index():
     return render_template('index.html', books=get_books())
 
 
+def get_isbn(book):
+    identifiers = book.get('volumeInfo', {}).get('industryIdentifiers', [])
+    if identifiers:
+        identifiers_dict = {}
+        for identifier_dict in identifiers:
+            identifiers_dict[identifier_dict['type']
+                             ] = identifier_dict['identifier']
+        if identifiers_dict.get('ISBN_10'):
+            return identifiers_dict.get('ISBN_10')
+        else:
+            return identifiers[0].get('identifier', "0000000000")
+    else:
+        return "0000000000"
+
+
 def map_book(book):
-    return {
+    return get_isbn(book), {
         'title': book.get('volumeInfo', {}).get('title', 'no_title'),
         'author': ', '.join(book.get('volumeInfo', {}).get('authors', ['annonymous'])),
         'date': book.get('volumeInfo', {}).get('publishedDate', 'no-date'),
-        'isbn': book.get('volumeInfo', {}).get('industryIdentifiers', [{'identifier': "0000000000"}])[0].get('identifier'),
         'pages': book.get('volumeInfo', {}).get('pageCount', 0),
         'language': book.get('volumeInfo', {}).get('language', 'no-lang'),
         'frontPage': book.get('volumeInfo', {}).get('imageLinks', {}).get('thumbnail', '#')
@@ -28,14 +42,17 @@ def map_book(book):
 
 def get_request(url):
     response = requests.get(url)
+    reasult = {}
     if response.status_code == 200:
         data = response.json()
         items = data['items']
-        reasult = list(map(map_book, items))
-        return reasult
+        for book in items:
+            key, book = map_book(book)
+            reasult[key] = book
+        return [(lambda d: d.update(isbn=key) or d)(val) for (key, val) in reasult.items()]
 
 
-@app.route('/import', methods=['GET', 'POST'])
+@ app.route('/import', methods=['GET', 'POST'])
 def import_books():
     form = SearchForm()
     if form.validate_on_submit():
