@@ -3,27 +3,51 @@
 {% block content %}
 <div class="row">
     <div class="col-lg-3">
-        <form action="" method="GET" novalidate>
-            {{ form.hidden_tag() }}
+        <form action="" method="GET">
             <div class="mb-3">
                 {{ form.title.label(class_="form-label") }}
                 {{ form.title(size=32, class_="form-control") }}
+                {% if form.title.errors %}
+                {% for error in form.title.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+                {% endif %}
             </div>
             <div class="mb-3">
                 {{ form.author.label(class_="form-label") }}
                 {{ form.author(size=32, class_="form-control") }}
+                {% if form.author.errors %}
+                {% for error in form.author.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+                {% endif %}
             </div>
             <div class="mb-3">
                 {{ form.language.label(class_="form-label") }}
                 {{ form.language(size=32, class_="form-control") }}
+                {% if form.language.errors %}
+                {% for error in form.language.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+                {% endif %}
             </div>
             <div class="mb-3">
-                {{ form.date_from.label(class_="form-label") }}
-                {{ form.date_from(class_="form-control") }}
+                {{ form.startdate_field.label(class_="form-label") }}
+                {{ form.startdate_field(class_="form-control") }}
+                {% if form.startdate_field.errors %}
+                {% for error in form.startdate_field.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+                {% endif %}
             </div>
             <div class="mb-3">
-                {{ form.date_to.label(class_="form-label") }}
-                {{ form.date_to(class_="form-control") }}
+                {{ form.enddate_field.label(class_="form-label") }}
+                {{ form.enddate_field(class_="form-control") }}
+                {% if form.enddate_field.errors %}
+                {% for error in form.enddate_field.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+                {% endif %}
             </div>
             {{ form.submit(class_="btn btn-primary") }}
         </form>

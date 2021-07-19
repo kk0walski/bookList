@@ -1,18 +1,19 @@
+from datetime import date
 from flask_wtf import FlaskForm
-from wtforms.fields.html5 import URLField, DateField
-from wtforms import StringField, IntegerField, SubmitField
-from wtforms.fields.simple import TextField
+from wtforms_components import DateRange
+from wtforms import SubmitField, StringField, IntegerField
 from wtforms.validators import DataRequired, url, ValidationError
+from wtforms.fields.html5 import URLField, DateField
 
 
 class BookForm(FlaskForm):
     isbn = StringField('ISBN', validators=[DataRequired()])
     title = StringField('Title', validators=[DataRequired()])
     author = StringField('Author', validators=[DataRequired()])
-    pubDate = DateField("Publication date", format='%Y-%m-%d')
+    pubDate = DateField("Publication date", format='%Y.%m.%d')
     pages = IntegerField("Pages number")
     fronPage = URLField("frontPage", validators=[url()])
-    language = TextField("Language")
+    language = StringField("Language")
     submit = SubmitField("ADD/CHANGE")
 
 
@@ -30,11 +31,14 @@ class FilterForm(FlaskForm):
     title = StringField("Title")
     author = StringField("Author")
     language = StringField("language")
-    date_from = DateField("Date from", format='%Y-%m-%d')
-    date_to = DateField("Date To", format='%Y-%m-%d')
+    startdate_field = DateField("Date from", validators=[
+                                DateRange(max=date.today())], format='%Y.%m.%d')
+    enddate_field = DateField("Date To", validators=[
+        DateRange(max=date.today())], format='%Y.%m.%d')
     submit = SubmitField("FILTER")
 
-    def validate_date_to(form, field):
-        if field.data < form.date_from.data:
-            raise ValidationError(
-                "End date must not be earlier than start date.")
+    def validate_enddate_field(self, form, field):
+        if form.startdate_field.data:
+            if field.data < form.startdate_field.data:
+                raise ValidationError(
+                    "End date must not be earlier than start date.")

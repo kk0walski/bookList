@@ -13,14 +13,18 @@ app.config.from_object(Config)
 def index():
     form = FilterForm()
     if form.validate_on_submit():
-        query_data = {
-            'title': form.title.data,
-            'author': form.author.data,
-            'language': form.language.data,
-            'date_from': form.date_from.data,
-            'date_to': form.date_to.data,
-        }
-        return render_template('index.html', form=form)
+        if form.validate_date_to_field(form.date_to_field.data):
+            app.logger.info("DUPA1")
+            query_data = {
+                'title': form.title.data,
+                'author': form.author.data,
+                'language': form.language.data,
+                'date_from': form.date_from.data,
+                'date_to': form.date_to.data,
+            }
+            return render_template('index.html', form=form, books=get_books())
+        else:
+            return render_template('index.html', form=form)
     return render_template('index.html', form=form, books=get_books())
 
 
@@ -67,7 +71,7 @@ def get_request(url):
 
 @app.route('/import', methods=['GET', 'POST'])
 def import_books():
-    form = SearchForm()
+    form = SearchForm(request.form)
     if form.validate_on_submit():
         query_data = {
             'q': form.search.data,
