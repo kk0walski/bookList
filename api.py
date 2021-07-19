@@ -22,7 +22,7 @@ def map_book(book):
         'isbn': book.get('volumeInfo', {}).get('industryIdentifiers', [{'identifier': "0000000000"}])[0].get('identifier'),
         'pages': book.get('volumeInfo', {}).get('pageCount', 0),
         'language': book.get('volumeInfo', {}).get('language', 'no-lang'),
-        'frontPage': book.get('volumeInfo', {}).get('imageLinks', {}).get('thumbnail', '...')
+        'frontPage': book.get('volumeInfo', {}).get('imageLinks', {}).get('thumbnail', '#')
     }
 
 

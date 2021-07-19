@@ -39,7 +39,25 @@
         var local_books = []
 
         function create_link(book, index) {
-            return `<div id="${index}"
+            if (book.frontPage === '#') {
+                return `<div id="${index}"
+                class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                <div class="flex-column">
+                    ${book.title} <small>by ${book.author}</small>
+                    <p><small>Pub date: ${book.date}</small></p>
+                    <p>ISBN: ${book.isbn}</p>
+                    <span class="badge bg-primary">pageCount: ${book.pages}</span>
+                    <span class="badge bg-secondary">lang: ${book.language}</span>
+                    <button type="button" class="btn btn-danger" onClick=remove_book(${index})>Remove</button>
+                </div>
+                <svg class="bd-placeholder-img img-thumbnail" width="100" height="150" xmlns="http://www.w3.org/2000/svg"
+                 role="img" preserveAspectRatio="xMidYMid slice" focusable="false">
+                    <rect width="100" height="150" fill="#868e96"></rect>
+                    <text x="10%" y="50%" fill="#dee2e6" dy=".3em">100x150</text>
+                </svg>
+            </div>`
+            } else {
+                return `<div id="${index}"
                 class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                 <div class="flex-column">
                     ${book.title} <small>by ${book.author}</small>
@@ -53,6 +71,7 @@
                     <img src="${book.frontPage}" class="img-thumbnail" width="100" height="150" alt="front page">
                 </figure>
             </div>`
+            }
 
         }
 
