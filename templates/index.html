@@ -3,7 +3,8 @@
 {% block content %}
 <div class="row">
     <div class="col-lg-3">
-        <form action="" method="GET">
+        <form action="" method="POST" novalidate>
+            {{ form.hidden_tag() }}
             <div class="mb-3">
                 {{ form.title.label(class_="form-label") }}
                 {{ form.title(size=32, class_="form-control") }}
