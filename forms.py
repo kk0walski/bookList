@@ -11,7 +11,7 @@ class BookForm(FlaskForm):
     author = StringField('Author', validators=[DataRequired()])
     pubDate = DateField("Publication date",
                         format='%Y-%m-%d', validators=[Optional()])
-    pages = IntegerField("Pages number")
+    pages = IntegerField("Pages number", validators=[Optional()])
     fronPage = URLField("frontPage", render_kw={
                         "placeholder": "http://www.example.com"})
     language = StringField("Language", render_kw={
