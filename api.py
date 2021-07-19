@@ -31,7 +31,7 @@ def get_request(url):
     if response.status_code == 200:
         data = response.json()
         items = data['items']
-        reasult = map(map_book, items)
+        reasult = list(map(map_book, items))
         return reasult
 
 
@@ -57,7 +57,7 @@ def import_books():
             querystring = querystring.replace('+', '', 1)
         url = 'https://www.googleapis.com/books/v1/volumes?' + querystring
         books = get_request(url)
-        return render_template('import.html', form=form, books=books)
+        return render_template('import.html', form=form, books=json.dumps(books))
     return render_template('import.html', form=form)
 
 
