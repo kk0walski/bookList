@@ -3,28 +3,29 @@
 {% block content %}
 <div class="row">
     <div class="col-lg-3">
-        <form method="GET">
+        <form action="" method="GET" novalidate>
+            {{ form.hidden_tag() }}
             <div class="mb-3">
-                <lablel for="titleSeach" class="form-label">Title</lablel>
-                <input type="text" class="form-control" name='title' id="titleSeach" placeholder="title">
+                {{ form.title.label(class_="form-label") }}
+                {{ form.title(size=32, class_="form-control") }}
             </div>
             <div class="mb-3">
-                <lablel for="authorSearch" class="form-label">Author</lablel>
-                <input type="text" class="form-control" name='author' id="authorSearch" placeholder="author">
+                {{ form.author.label(class_="form-label") }}
+                {{ form.author(size=32, class_="form-control") }}
             </div>
             <div class="mb-3">
-                <lablel for="langSearch" class="form-label">Language</lablel>
-                <input type="text" class="form-control" name='lang' id="langSearch" placeholder="language">
+                {{ form.language.label(class_="form-label") }}
+                {{ form.language(size=32, class_="form-control") }}
             </div>
             <div class="mb-3">
-                <lablel for="dateFrom" class="form-label">Date From</lablel>
-                <input type="date" class="form-control" name='dateFrom' id="dateFrom" placeholder="date-from">
+                {{ form.date_from.label(class_="form-label") }}
+                {{ form.date_from(class_="form-control") }}
             </div>
             <div class="mb-3">
-                <lablel for="dateTo" class="form-label">Date To</lablel>
-                <input type="date" class="form-control" name='dateTo' id="dateTo" placeholder="date-to">
+                {{ form.date_to.label(class_="form-label") }}
+                {{ form.date_to(class_="form-control") }}
             </div>
-            <button type="submit" class="btn btn-primary">Search</button>
+            {{ form.submit(class_="btn btn-primary") }}
         </form>
     </div>
     <div class="col-lg-9">

@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-from forms import SearchForm
+from forms import SearchForm, FilterForm
 from config import Config
 from urllib.parse import urlencode
 import json
@@ -9,9 +9,19 @@ app = Flask(__name__)
 app.config.from_object(Config)
 
 
-@app.route('/', methods=['GET'])
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('index.html', books=get_books())
+    form = FilterForm()
+    if form.validate_on_submit():
+        query_data = {
+            'title': form.title.data,
+            'author': form.author.data,
+            'language': form.language.data,
+            'date_from': form.date_from.data,
+            'date_to': form.date_to.data,
+        }
+        return render_template('index.html', form=form)
+    return render_template('index.html', form=form, books=get_books())
 
 
 def get_isbn(book):
@@ -55,7 +65,7 @@ def get_request(url):
         return [(lambda d: d.update(isbn=key) or d)(val) for (key, val) in reasult.items()]
 
 
-@ app.route('/import', methods=['GET', 'POST'])
+@app.route('/import', methods=['GET', 'POST'])
 def import_books():
     form = SearchForm()
     if form.validate_on_submit():

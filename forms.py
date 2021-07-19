@@ -1,8 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms.fields.html5 import URLField
-from wtforms import StringField, DateField, IntegerField, SubmitField
+from wtforms.fields.html5 import URLField, DateField
+from wtforms import StringField, IntegerField, SubmitField
 from wtforms.fields.simple import TextField
-from wtforms.validators import DataRequired, url
+from wtforms.validators import DataRequired, url, ValidationError
 
 
 class BookForm(FlaskForm):
@@ -24,3 +24,17 @@ class SearchForm(FlaskForm):
     subject = StringField("Subject")
     isbn = StringField("ISBN")
     submit = SubmitField("IMPORT")
+
+
+class FilterForm(FlaskForm):
+    title = StringField("Title")
+    author = StringField("Author")
+    language = StringField("language")
+    date_from = DateField("Date from", format='%Y-%m-%d')
+    date_to = DateField("Date To", format='%Y-%m-%d')
+    submit = SubmitField("FILTER")
+
+    def validate_date_to(form, field):
+        if field.data < form.date_from.data:
+            raise ValidationError(
+                "End date must not be earlier than start date.")
