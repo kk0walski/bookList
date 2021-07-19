@@ -17,16 +17,20 @@ def index():
 @app.route('/books/<string:isbn>', methods=["PUT", "GET"])
 def book(isbn):
     form = BookForm()
+    if form.validate_on_submit():
+        return render_template('book.html', form=form)
     return render_template('book.html', form=form)
 
 
-@app.route('/books/', methods=["POST", "GET"])
+@app.route('/books/add', methods=["POST", "GET"])
 def add_book():
     form = BookForm()
+    if form.validate_on_submit():
+        return render_template('book.html', form=form)
     return render_template('book.html', form=form)
 
 
-@app.route('/books', methods=['GET', 'POST'])
+@app.route('/books/', methods=['GET', 'POST'])
 def books():
     form = FilterForm()
     if form.validate_on_submit():
