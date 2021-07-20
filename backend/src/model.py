@@ -23,8 +23,10 @@ class Book(db.Model):
 
     @validates('url')
     def validate_url(self, key, url):
-        assert re.match(
-            r"^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$", url)
+        if url:
+            assert re.match(
+                r"^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$", url)
+            return url
         return url
 
     @property

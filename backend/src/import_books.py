@@ -4,6 +4,7 @@ from flask.helpers import url_for
 from .forms import SearchForm, ImportForm
 from urllib.parse import urlencode
 from flask import current_app
+from .model import Book, db
 import requests
 
 import_books = Blueprint("import", __name__,  url_prefix="/import")
@@ -33,7 +34,7 @@ def map_book(book):
             'pubDate': book.get('volumeInfo', {}).get('publishedDate', None),
             'pages': book.get('volumeInfo', {}).get('pageCount', None),
             'language': book.get('volumeInfo', {}).get('language', 'no-lang'),
-            'front': book.get('volumeInfo', {}).get('imageLinks', {}).get('thumbnail', None)
+            'url': book.get('volumeInfo', {}).get('imageLinks', {}).get('thumbnail', None)
         }
 
 
@@ -49,8 +50,8 @@ def get_request(url):
                 reasult[key] = book
         reasult_list = [(lambda d: d.update(isbn=key) or d)(val)
                         for (key, val) in reasult.items()]
-        reasult_books = list(filter(lambda x: x['front'] != None, reasult_list)) + list(
-            filter(lambda x: x['front'] == None, reasult_list))
+        reasult_books = list(filter(lambda x: x['url'] != None, reasult_list)) + list(
+            filter(lambda x: x['url'] == None, reasult_list))
         return reasult_books
 
 
@@ -81,6 +82,8 @@ def books():
 def fix_date(date):
     elements = date.split('-')
     if len(elements) == 1:
+        if elements[0][-1] == "*":
+            elements[0] = elements[0][:-1]
         elements.append('01')
         elements.append('01')
         return '-'.join(elements)
@@ -101,7 +104,14 @@ def append_books(query):
         return render_template('import2.html', form=import_form)
     elif import_form.submit.data:
         if import_form.validate():
-            return redirect(url_for('books.get_books'))
+            books = import_form.books.entries
+            for book in books:
+                new_book = Book(isbn=book.isbn.data, author=book.author.data, title=book.title.data,
+                                date=book.pubDate.data, pages=book.pages.data, url=book.url.data,
+                                language=book.language.data)
+                db.session.add(new_book)
+                db.session.commit()
+            return redirect(url_for('books.show_books'))
         return render_template('import2.html', form=import_form)
     else:
         url = 'https://www.googleapis.com/books/v1/volumes?' + query
@@ -110,6 +120,7 @@ def append_books(query):
             for book in books:
                 if book['pubDate']:
                     new_date = fix_date(book['pubDate'])
+                    current_app.logger.info(new_date)
                     book['pubDate'] = datetime.strptime(
                         new_date, '%Y-%m-%d').date()
                 import_form.books.append_entry(book)

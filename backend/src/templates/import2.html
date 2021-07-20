@@ -53,10 +53,10 @@
                 {% endif %}
             </div>
             <div class="mb-3">
-                {{ book.front.label(class_="form-label") }}
-                {{ book.front(size=32, class_="form-control") }}
-                {% if book.front.errors %}
-                {% for error in book.front.errors %}
+                {{ book.url.label(class_="form-label") }}
+                {{ book.url(size=32, class_="form-control") }}
+                {% if book.url.errors %}
+                {% for error in book.url.errors %}
                 <span style="color: red;">[{{ error }}]</span>
                 {% endfor %}
                 {% endif %}
