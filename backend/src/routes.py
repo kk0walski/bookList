@@ -1,5 +1,6 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, redirect, url_for
 from .forms import FilterForm, BookFormSubmit
+from .model import Book, db
 
 static = Blueprint("static", __name__)
 books = Blueprint('books', __name__,  url_prefix="/books")
@@ -12,8 +13,14 @@ def index():
 
 @books.route('/edit/<string:isbn>', methods=["PUT", "GET"])
 def book(isbn):
-    form = BookFormSubmit()
+    book = Book.query.filter_by(isbn=isbn).first()
+    form = BookFormSubmit(obj=book)
     if form.validate_on_submit():
+        new_book = Book(isbn=form.isbn.data, author=form.author.data, title=form.title.data,
+                        date=form.pubDate.data, pages=form.pages.data, url=form.fronPage.data,
+                        language=form.language.data)
+        db.session.add(new_book)
+        db.session.commit()
         return render_template('book.html', form=form)
     return render_template('book.html', form=form)
 
@@ -22,12 +29,17 @@ def book(isbn):
 def add_book():
     form = BookFormSubmit()
     if form.validate_on_submit():
-        return render_template('book.html', form=form)
+        book = Book(isbn=form.isbn.data, author=form.author.data, title=form.title.data,
+                    date=form.pubDate.data, pages=form.pages.data, url=form.fronPage.data,
+                    language=form.language.data)
+        db.session.add(book)
+        db.session.commit()
+        return redirect(url_for('books.show_books'))
     return render_template('book.html', form=form)
 
 
 @books.route('/', methods=['GET', 'POST'])
-def get_books():
+def show_books():
     form = FilterForm()
     if form.validate_on_submit():
         query_data = {
@@ -37,39 +49,10 @@ def get_books():
             'date_from': form.startdate_field.data,
             'date_to': form.enddate_field.data,
         }
-        return render_template('books.html', form=form, books=get_books())
-    return render_template('books.html', form=form, books=get_books())
+        return render_template('books.html', form=form, books=all_books())
+    return render_template('books.html', form=form, books=all_books())
 
 
-def get_books():
-    books = [
-        {
-            'title': "Don Quixote",
-            'author': "Miguel de Cervantes",
-            'date': "10-11-2012",
-            'isbn': "9788320717501",
-            'pages': 100,
-            'language': 'polish',
-            'frontPage': "https://s3.eu-central-1.amazonaws.com/bootstrapbaymisc/blog/24_days_bootstrap/don_quixote.jpg"
-        },
-        {
-            'title': "As I Lay Dying",
-            'author': "William Faulkner",
-            'date': "10-11-2012",
-            'isbn': "9788320717501",
-            'pages': 100,
-            'language': 'polish',
-            'frontPage': "https://s3.eu-central-1.amazonaws.com/bootstrapbaymisc/blog/24_days_bootstrap/as_I_lay.jpg"
-        },
-        {
-            'title': "Things Fall Apart",
-            'author': "Miguel de Cervantes",
-            'date': "10-11-2012",
-            'isbn': "9788320717501",
-            'pages': 100,
-            'language': 'polish',
-            'frontPage': "https://s3.eu-central-1.amazonaws.com/bootstrapbaymisc/blog/24_days_bootstrap/things_fall_apart.jpg"
-        }
-    ]
-
+def all_books():
+    books = Book.query.all()
     return books
