@@ -46,7 +46,11 @@ def get_request(url):
             key, book = map_book(book)
             if key:
                 reasult[key] = book
-        return [(lambda d: d.update(isbn=key) or d)(val) for (key, val) in reasult.items()]
+        reasult_list = [(lambda d: d.update(isbn=key) or d)(val)
+                        for (key, val) in reasult.items()]
+        reasult_books = list(filter(lambda x: x['front'] != None, reasult_list)) + list(
+            filter(lambda x: x['front'] == None, reasult_list))
+        return reasult_books
 
 
 @import_books.route('/', methods=['GET', 'POST'])
