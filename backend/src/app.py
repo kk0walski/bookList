@@ -1,7 +1,7 @@
 import os
 from flask import Flask
 
-from .routes import routes
+from .routes import static, books
 
 
 def create_app(test_config=None):
@@ -15,7 +15,8 @@ def create_app(test_config=None):
     if test_config:
         app.config.from_mapping(**test_config)
 
-    app.register_blueprint(routes)
+    app.register_blueprint(static)
+    app.register_blueprint(books)
     return app
 
 

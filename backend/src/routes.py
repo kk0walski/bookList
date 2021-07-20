@@ -4,15 +4,16 @@ from urllib.parse import urlencode
 import json
 import requests
 
-routes = Blueprint("books", __name__)
+static = Blueprint("static", __name__)
+books = Blueprint("books", __name__,  url_prefix="/books")
 
 
-@routes.route('/')
+@static.route('/')
 def index():
     return render_template('index.html')
 
 
-@routes.route('/books/<string:isbn>', methods=["PUT", "GET"])
+@books.route('/edit/<string:isbn>', methods=["PUT", "GET"])
 def book(isbn):
     form = BookForm()
     if form.validate_on_submit():
@@ -20,7 +21,7 @@ def book(isbn):
     return render_template('book.html', form=form)
 
 
-@routes.route('/books/add', methods=["POST", "GET"])
+@books.route('/add', methods=["POST", "GET"])
 def add_book():
     form = BookForm()
     if form.validate_on_submit():
@@ -28,8 +29,8 @@ def add_book():
     return render_template('book.html', form=form)
 
 
-@routes.route('/books/', methods=['GET', 'POST'])
-def books():
+@books.route('/', methods=['GET', 'POST'])
+def get_books():
     form = FilterForm()
     if form.validate_on_submit():
         query_data = {
@@ -84,7 +85,7 @@ def get_request(url):
         return [(lambda d: d.update(isbn=key) or d)(val) for (key, val) in reasult.items()]
 
 
-@routes.route('/import', methods=['GET', 'POST'])
+@books.route('/import', methods=['GET', 'POST'])
 def import_books():
     form = SearchForm()
     if form.validate_on_submit():
