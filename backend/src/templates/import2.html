@@ -1,115 +1,78 @@
 {% extends "base.html" %}
 
 {% block content %}
-
 <div class="row">
-    <div class="col-lg-3">
-        <form action="#" onsubmit="logSubmit()" id="import">
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        {% for book in form.books %}
+        <div class="shadow-sm p-3 mb-5 bg-body rounded mb-4">
             <div class="mb-3">
-                <lablel for="q" class="form-label">Search field</lablel>
-                <input type="text" class="form-control" name='q' id="q" placeholder="Search">
+                {{ book.isbn.label(class_="form-label") }}
+                {{ book.isbn(size=32, class_="form-control") }}
+                {% if book.isbn.errors %}
+                {% for error in book.isbn.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+                {% endif %}
             </div>
             <div class="mb-3">
-                <lablel for="titleSeach" class="form-label">Title</lablel>
-                <input type="text" class="form-control" name='intitle' id="titleSeach" placeholder="title">
+                {{ book.title.label(class_="form-label") }}
+                {{ book.title(size=32, class_="form-control") }}
+                {% if book.title.errors %}
+                {% for error in book.title.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+                {% endif %}
             </div>
             <div class="mb-3">
-                <lablel for="authorSearch" class="form-label">Author</lablel>
-                <input type="text" class="form-control" name='inauthor' id="authorSearch" placeholder="author">
+                {{ book.author.label(class_="form-label") }}
+                {{ book.author(size=32, class_="form-control") }}
+                {% if book.author.errors %}
+                {% for error in book.author.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+                {% endif %}
             </div>
             <div class="mb-3">
-                <lablel for="publisher" class="form-label">Publisher</lablel>
-                <input type="text" class="form-control" name='inpublisher' id="publisher" placeholder="publisher">
+                {{ book.pubDate.label(class_="form-label") }}
+                {{ book.pubDate(class_="form-control") }}
+                {% if book.pubDate.errors %}
+                {% for error in book.pubDate.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+                {% endif %}
             </div>
             <div class="mb-3">
-                <lablel for="subject" class="form-label">Subject</lablel>
-                <input type="text" class="form-control" name='subject' id="subject" placeholder="subject">
+                {{ book.pages.label(class_="form-label") }}
+                {{ book.pages(size=32, class_="form-control") }}
+                {% if book.pages.errors %}
+                {% for error in book.pages.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+                {% endif %}
             </div>
             <div class="mb-3">
-                <lablel for="isbn" class="form-label">ISBN</lablel>
-                <input type="text" class="form-control" name='isbn' id="isbn" placeholder="ISBN">
+                {{ book.front.label(class_="form-label") }}
+                {{ book.front(size=32, class_="form-control") }}
+                {% if book.front.errors %}
+                {% for error in book.front.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+                {% endif %}
             </div>
-            <button type="submit" class="btn btn-primary">Search</button>
-        </form>
-    </div>
-    <div class="col-lg-9">
-        <ul class="list-group" id='books'>
-
-        </ul>
-    </div>
+            <div class="mb-3">
+                {{ book.language.label(class_="form-label") }}
+                {{ book.language(size=32, class_="form-control") }}
+                {% if book.language.errors %}
+                {% for error in book.language.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+        {{ form.remove(class_="btn btn-danger") }}
+        {{ form.submit(class_="btn btn-primary") }}
+    </form>
 </div>
-
-<script type="text/javascript">
-
-    function get_values(form) {
-        return Object.values(form).reduce((obj, field) => { obj[field.name] = field.value; return obj }, {})
-    }
-
-    function clean(obj) {
-        for (var propName in obj) {
-            if (propName !== 'q') {
-                if (obj[propName] === null || obj[propName] === undefined || obj[propName] === '') {
-                    delete obj[propName];
-                }
-            }
-        }
-        return obj
-    }
-
-    function map_book(book){
-        return {
-            'title': book?.volumeInfo?.title,
-            'author': book.volumeInfo?.authors.join(','),
-            'publishedDate': book.volumeInfo?.publishedDate,
-            'isbn': book.volumeInfo?.industryIdentifiers?.[0]?.identifier,
-            'pages': book?.volumeInfo?.pageCount,
-            'language': book.volumeInfo?.language,
-            'frontPage': book.volumeInfo?.imageLinks?.thumbnail
-        }
-    }
-
-    function show_books(data){
-        console.log(data)
-        let books = data.items.map(map_book)
-        console.log(books)
-    }
-
-    function buildUrl(form) {
-        let url = 'https://www.googleapis.com/books/v1/volumes?'
-        let values = get_values(form)
-        values = clean(values)
-        let params = new URLSearchParams(values)
-        let params_string = params.toString()
-        if (params.get('q') === '') {
-            params_string = params_string.replace('&', '')
-        }
-        params_string = params_string.replaceAll('&', '+')
-        params_string = params_string.replaceAll('=', ':')
-        params_string = params_string.replace(':', '=')
-        url = url + params_string
-        return url
-    }
-
-    function logSubmit() {
-        event.preventDefault();
-        const url = buildUrl(event.target)
-        fetch(url).then(
-            function (response) {
-                if (response.status !== 200) {
-                    console.log('Looks like there was a problem. Status Code: ' +
-                        response.status);
-                    return;
-                }
-                console.log("DUPA")
-                // Examine the text in the response
-                response.json().then(show_books(data));
-            }
-        )
-            .catch(function (err) {
-                console.log('Fetch Error :-S', err);
-            });
-    }
-
-</script>
-
 {% endblock %}

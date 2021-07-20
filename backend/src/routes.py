@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template
-from .forms import FilterForm, BookForm
+from .forms import FilterForm, BookFormSubmit
 
 static = Blueprint("static", __name__)
 books = Blueprint('books', __name__,  url_prefix="/books")
@@ -12,7 +12,7 @@ def index():
 
 @books.route('/edit/<string:isbn>', methods=["PUT", "GET"])
 def book(isbn):
-    form = BookForm()
+    form = BookFormSubmit()
     if form.validate_on_submit():
         return render_template('book.html', form=form)
     return render_template('book.html', form=form)
@@ -20,7 +20,7 @@ def book(isbn):
 
 @books.route('/add', methods=["POST", "GET"])
 def add_book():
-    form = BookForm()
+    form = BookFormSubmit()
     if form.validate_on_submit():
         return render_template('book.html', form=form)
     return render_template('book.html', form=form)
