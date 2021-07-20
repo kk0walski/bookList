@@ -17,7 +17,7 @@ def book(isbn):
     form = BookFormSubmit(obj=book)
     if form.validate_on_submit():
         new_book = Book(isbn=form.isbn.data, author=form.author.data, title=form.title.data,
-                        date=form.pubDate.data, pages=form.pages.data, url=form.fronPage.data,
+                        date=form.pubDate.data, pages=form.pages.data, url=form.url.data,
                         language=form.language.data)
         db.session.add(new_book)
         db.session.commit()
@@ -30,7 +30,7 @@ def add_book():
     form = BookFormSubmit()
     if form.validate_on_submit():
         book = Book(isbn=form.isbn.data, author=form.author.data, title=form.title.data,
-                    date=form.pubDate.data, pages=form.pages.data, url=form.fronPage.data,
+                    date=form.pubDate.data, pages=form.pages.data, url=form.url.data,
                     language=form.language.data)
         db.session.add(book)
         db.session.commit()

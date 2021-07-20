@@ -51,10 +51,10 @@
             {% endif %}
         </div>
         <div class="mb-3">
-            {{ form.fronPage.label(class_="form-label") }}
-            {{ form.fronPage(size=32, class_="form-control") }}
-            {% if form.fronPage.errors %}
-            {% for error in form.fronPage.errors %}
+            {{ form.url.label(class_="form-label") }}
+            {{ form.url(size=32, class_="form-control") }}
+            {% if form.url.errors %}
+            {% for error in form.url.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
             {% endif %}
