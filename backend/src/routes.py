@@ -1,9 +1,11 @@
 from flask import Blueprint, render_template, redirect, url_for
 from .forms import FilterForm, BookFormSubmit
+from flask_paginate import Pagination, get_page_args
 from .model import Book, db
 
 static = Blueprint("static", __name__)
 books = Blueprint('books', __name__,  url_prefix="/books")
+PER_PAGE = 5
 
 
 @static.route('/')
@@ -38,9 +40,14 @@ def add_book():
     return render_template('book.html', form=form)
 
 
+def get_books(books, offset=0, per_page=10):
+    return books[offset: offset + per_page]
+
+
 @books.route('/', methods=['GET', 'POST'])
 def show_books():
     form = FilterForm()
+    books = Book.query
     if form.validate_on_submit():
         query_data = {
             'title': "%{}%".format(form.title.data) if form.title.data else form.title.data,
@@ -49,7 +56,6 @@ def show_books():
             'date_from': form.startdate_field.data,
             'date_to': form.enddate_field.data,
         }
-        books = Book.query
         if query_data['title']:
             books = books.filter(Book.title.like(query_data['title']))
         if query_data['author']:
@@ -61,10 +67,11 @@ def show_books():
         if query_data['date_to']:
             books = books.filter(Book.date <= query_data['date_to'])
 
-        return render_template('books.html', form=form, books=books.all())
-    return render_template('books.html', form=form, books=all_books())
-
-
-def all_books():
-    books = Book.query.all()
-    return books
+    page, _, _ = get_page_args(page_parameter='page',
+                               per_page_parameter='per_page')
+    offset = (page - 1) * PER_PAGE
+    pagination_books = get_books(books, offset=offset, per_page=PER_PAGE)
+    pagination = Pagination(page=page, per_page=PER_PAGE, total=books.count(),
+                            css_framework='bootstrap4')
+    return render_template('books.html', form=form, books=pagination_books,
+                           page=page, per_page=PER_PAGE, pagination=pagination)
