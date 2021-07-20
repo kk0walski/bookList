@@ -25,6 +25,7 @@ class Book(db.Model):
     def validate_url(self, key, url):
         assert re.match(
             r"^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$", url)
+        return url
 
     @property
     def serialize(self):
