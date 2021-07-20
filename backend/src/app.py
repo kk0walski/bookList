@@ -24,7 +24,7 @@ def create_app(test_config=None):
 
 def run():
     app = create_app()
-    app.run()
+    app.run(debug=True)
 
 
 if __name__ == "__main__":
