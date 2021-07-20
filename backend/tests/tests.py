@@ -1,4 +1,5 @@
 import unittest
+from collections import namedtuple
 import warnings
 from src.forms import BookForm, BookFormSubmit, SearchForm, FilterForm
 from src.app import create_app
@@ -23,7 +24,6 @@ class TestAPI(unittest.TestCase):
         self.app_context = self.app.app_context()
         self.app_context.push()
         self.client = self.app.test_client()
-        self.book = BookForm()
 
     def test_links(self):
         response = self.client.get('/')
@@ -35,12 +35,23 @@ class TestAPI(unittest.TestCase):
         response = self.client.get('/books/add')
         self.assertEqual(response.status_code, 200)
 
-    def test_empthy_book_form(self):
-        self.assertFalse(self.book.validate())
-        errors = self.book.errors.items()
+    def test_book_form(self):
+        book = BookForm()
+        self.assertFalse(book.validate())
+        errors = book.errors.items()
         self.assertIn(('isbn', ['This field is required.']), errors)
         self.assertIn(('title', ['This field is required.']), errors)
         self.assertIn(('author', ['This field is required.']), errors)
+        book = BookForm(isbn="9788320717501")
+        self.assertFalse(book.validate())
+        self.assertIn(('title', ['This field is required.']), errors)
+        self.assertIn(('author', ['This field is required.']), errors)
+        book = BookForm(isbn="9788320717501", title="Miguel de Cervantes")
+        self.assertFalse(book.validate())
+        self.assertIn(('author', ['This field is required.']), errors)
+        book = BookForm(isbn="9788320717501",
+                        title="Miguel de Cervantes", author="Miguel de Cervantes")
+        self.assertTrue(book.validate())
 
     def tearDown(self):
         pass
