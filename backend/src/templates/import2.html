@@ -6,6 +6,7 @@
         {{ form.hidden_tag() }}
         {% for book in form.books %}
         <div class="shadow-sm p-3 mb-5 bg-body rounded mb-4">
+            {{ book.hidden_tag() }}
             <div class="mb-3">
                 {{ book.isbn.label(class_="form-label") }}
                 {{ book.isbn(size=32, class_="form-control") }}

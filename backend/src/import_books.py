@@ -3,6 +3,7 @@ from flask import Blueprint, render_template, redirect
 from flask.helpers import url_for
 from .forms import SearchForm, ImportForm
 from urllib.parse import urlencode
+from flask import current_app
 import requests
 
 import_books = Blueprint("import", __name__,  url_prefix="/import")
@@ -95,15 +96,23 @@ def fix_date(date):
 @import_books.route('/append/<query>', methods=['GET', 'POST'])
 def append_books(query):
     import_form = ImportForm()
-    url = 'https://www.googleapis.com/books/v1/volumes?' + query
-    books = get_request(url)
-    if books:
-        for book in books:
-            if book['pubDate']:
-                new_date = fix_date(book['pubDate'])
-                book['pubDate'] = datetime.strptime(
-                    new_date, '%Y-%m-%d').date()
-            import_form.books.append_entry(book)
+    if import_form.remove.data:
+        import_form.books.pop_entry()
+        return render_template('import2.html', form=import_form)
+    elif import_form.submit.data:
+        if import_form.validate():
+            return redirect(url_for('books.get_books'))
         return render_template('import2.html', form=import_form)
     else:
-        return redirect(url_for('books'))
+        url = 'https://www.googleapis.com/books/v1/volumes?' + query
+        books = get_request(url)
+        if books:
+            for book in books:
+                if book['pubDate']:
+                    new_date = fix_date(book['pubDate'])
+                    book['pubDate'] = datetime.strptime(
+                        new_date, '%Y-%m-%d').date()
+                import_form.books.append_entry(book)
+            return render_template('import2.html', form=import_form)
+        else:
+            return redirect(url_for('books'))

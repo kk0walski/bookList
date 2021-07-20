@@ -12,7 +12,7 @@ class BookForm(FlaskForm):
     pubDate = DateField("Publication date",
                         format='%Y-%m-%d', validators=[Optional()])
     pages = IntegerField("Pages number", validators=[Optional()])
-    front = URLField("frontPage", validators=[URL()], render_kw={
+    front = URLField("frontPage", validators=[URL(), Optional()], render_kw={
         "placeholder": "http://www.example.com"})
     language = StringField("Language", render_kw={
         "placeholder": "un"})
@@ -32,7 +32,7 @@ class BookFormSubmit(FlaskForm):
     pubDate = DateField("Publication date",
                         format='%Y-%m-%d', validators=[Optional()])
     pages = IntegerField("Pages number", validators=[Optional()])
-    fronPage = URLField("frontPage", validators=[URL()], render_kw={
+    fronPage = URLField("frontPage", validators=[URL(), Optional()], render_kw={
                         "placeholder": "http://www.example.com"})
     language = StringField("Language", render_kw={
         "placeholder": "un"})
