@@ -43,13 +43,25 @@ def show_books():
     form = FilterForm()
     if form.validate_on_submit():
         query_data = {
-            'title': form.title.data,
-            'author': form.author.data,
+            'title': "%{}%".format(form.title.data) if form.title.data else form.title.data,
+            'author': "%{}%".format(form.author.data) if form.author.data else form.author.data,
             'language': form.language.data,
             'date_from': form.startdate_field.data,
             'date_to': form.enddate_field.data,
         }
-        return render_template('books.html', form=form, books=all_books())
+        books = Book.query
+        if query_data['title']:
+            books = books.filter(Book.title.like(query_data['title']))
+        if query_data['author']:
+            books = books.filter(Book.author.like(query_data['author']))
+        if query_data['language']:
+            books = books.filter(Book.language == query_data['language'])
+        if query_data['date_from']:
+            books = books.filter(Book.date >= query_data['date_from'])
+        if query_data['date_to']:
+            books = books.filter(Book.date <= query_data['date_to'])
+
+        return render_template('books.html', form=form, books=books.all())
     return render_template('books.html', form=form, books=all_books())
 
 
