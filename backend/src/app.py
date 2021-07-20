@@ -1,6 +1,7 @@
 import os
 from flask import Flask
 
+from .import_books import import_books
 from .routes import static, books
 
 
@@ -17,6 +18,7 @@ def create_app(test_config=None):
 
     app.register_blueprint(static)
     app.register_blueprint(books)
+    app.register_blueprint(import_books)
     return app
 
 
