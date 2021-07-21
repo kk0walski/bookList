@@ -127,7 +127,6 @@ def get_date(book_date):
 def render_books_form(import_form, books):
     if books:
         for book in books:
-            current_app.logger.info("DATE: ", book['date'])
             book['date'] = get_date(book['date'])
             import_form.books.append_entry(book)
         return render_template('import2.html', form=import_form)
