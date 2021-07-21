@@ -38,3 +38,7 @@ class TestNotRenderTemplates(TestCase):
         response = self.client.get("/import/")
         self.assert_template_used('import.html')
         self.assert200(response)
+
+    def test_api(self):
+        response = self.client.get("/api/books")
+        self.assertEquals(response.json, {})

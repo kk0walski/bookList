@@ -19,19 +19,6 @@ class TestAPI(unittest.TestCase):
         self.app_context.push()
         self.client = self.app.test_client()
 
-    def test_links(self):
-        response = self.client.get('/')
-        self.assertEqual(response.status_code, 200)
-        response = self.client.get('/books/')
-        self.assertEqual(response.status_code, 200)
-        response = self.client.get('/import/')
-        self.assertEqual(response.status_code, 200)
-        response = self.client.get('/books/add')
-        self.assertEqual(response.status_code, 200)
-        response = self.client.get('/api/books')
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data, b'{}\n')
-
     def test_book_form(self):
         book = BookForm()
         self.assertFalse(book.validate())
