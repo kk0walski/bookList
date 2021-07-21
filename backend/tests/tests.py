@@ -1,5 +1,4 @@
 import unittest
-from collections import namedtuple
 import warnings
 from src.forms import BookForm, BookFormSubmit, SearchForm, FilterForm
 from src.app import create_app
@@ -9,11 +8,6 @@ TEST_DB = "test.db"
 
 
 class TestAPI(unittest.TestCase):
-    VALID_DATA = {
-        "description": "test_description",
-        "note": "test_note",
-        "amount": 5.1,
-    }
 
     def setUp(self):
         warnings.simplefilter('ignore', category=DeprecationWarning)
@@ -33,6 +27,8 @@ class TestAPI(unittest.TestCase):
         response = self.client.get('/import/')
         self.assertEqual(response.status_code, 200)
         response = self.client.get('/books/add')
+        self.assertEqual(response.status_code, 200)
+        response = self.client.get('/api/books')
         self.assertEqual(response.status_code, 200)
 
     def test_book_form(self):
