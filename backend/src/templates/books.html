@@ -52,14 +52,15 @@
             </div>
             {{ form.submit(class_="btn btn-primary") }}
         </form>
+        <br />
     </div>
     <div class="col-lg-9">
         <ul class="list-group">
             {% for book in books %}
-            <a href="#"
-                class="list-group-item list-group-item-action d-flex justify-content-between align-items-center disabled">
+            <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                 <div class="flex-column">
-                    {{ book.title }} <small>by {{ book.author }}</small>
+                    {{ book.title }} <small>by {{ book.author }}</small> <a
+                        href="{{ url_for('books.book', isbn=book.isbn) }}" class="link-primary">Edit</a>
                     <p><small>Pub date: {{ book.date }}</small></p>
                     <p>ISBN: {{ book.isbn }}</p>
                     <span class="badge bg-primary">pageCount: {{ book.pages }}</span>
@@ -68,7 +69,7 @@
                 <figure class="figure">
                     <img src="{{ book.url }}" class="img-thumbnail" alt="quixote">
                 </figure>
-            </a>
+            </div>
             {% endfor %}
         </ul>
         <br />

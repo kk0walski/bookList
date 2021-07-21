@@ -9,8 +9,8 @@ class BookForm(FlaskForm):
                        DataRequired(), Regexp(r"^([A-Z]+:)?\d*$")])
     title = StringField('Title', validators=[DataRequired()])
     author = StringField('Author', validators=[DataRequired()])
-    pubDate = DateField("Publication date",
-                        format='%Y-%m-%d', validators=[Optional()])
+    date = DateField("Publication date",
+                     format='%Y-%m-%d', validators=[Optional()])
     pages = IntegerField("Pages number", validators=[Optional()])
     url = URLField("frontPage", validators=[URL(), Optional()], render_kw={
         "placeholder": "http://www.example.com"})
@@ -29,8 +29,8 @@ class BookFormSubmit(FlaskForm):
                        DataRequired(), Regexp(r"^([A-Z]+:)?\d*$")])
     title = StringField('Title', validators=[DataRequired()])
     author = StringField('Author', validators=[DataRequired()])
-    pubDate = DateField("Publication date",
-                        format='%Y-%m-%d', validators=[Optional()])
+    date = DateField("Publication date",
+                     format='%Y-%m-%d', validators=[Optional()])
     pages = IntegerField("Pages number", validators=[Optional()])
     url = URLField("frontPage", validators=[URL(), Optional()], render_kw={
         "placeholder": "http://www.example.com"})

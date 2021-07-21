@@ -35,10 +35,10 @@
                 {% endif %}
             </div>
             <div class="mb-3">
-                {{ book.pubDate.label(class_="form-label") }}
-                {{ book.pubDate(class_="form-control") }}
-                {% if book.pubDate.errors %}
-                {% for error in book.pubDate.errors %}
+                {{ book.date.label(class_="form-label") }}
+                {{ book.date(class_="form-control") }}
+                {% if book.date.errors %}
+                {% for error in book.date.errors %}
                 <span style="color: red;">[{{ error }}]</span>
                 {% endfor %}
                 {% endif %}

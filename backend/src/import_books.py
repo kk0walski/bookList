@@ -31,7 +31,7 @@ def map_book(book):
         return isbn, {
             'title': book.get('volumeInfo', {}).get('title', 'no_title'),
             'author': ', '.join(book.get('volumeInfo', {}).get('authors', ['annonymous'])),
-            'pubDate': book.get('volumeInfo', {}).get('publishedDate', None),
+            'date': book.get('volumeInfo', {}).get('publishedDate', None),
             'pages': book.get('volumeInfo', {}).get('pageCount', None),
             'language': book.get('volumeInfo', {}).get('language', 'no-lang'),
             'url': book.get('volumeInfo', {}).get('imageLinks', {}).get('thumbnail', None)
@@ -107,7 +107,7 @@ def append_books(query):
             books = import_form.books.entries
             for book in books:
                 new_book = Book(isbn=book.isbn.data, author=book.author.data, title=book.title.data,
-                                date=book.pubDate.data, pages=book.pages.data, url=book.url.data,
+                                date=book.date.data, pages=book.pages.data, url=book.url.data,
                                 language=book.language.data)
                 db.session.add(new_book)
                 db.session.commit()
@@ -118,10 +118,10 @@ def append_books(query):
         books = get_request(url)
         if books:
             for book in books:
-                if book['pubDate']:
-                    new_date = fix_date(book['pubDate'])
+                if book['date']:
+                    new_date = fix_date(book['date'])
                     current_app.logger.info(new_date)
-                    book['pubDate'] = datetime.strptime(
+                    book['date'] = datetime.strptime(
                         new_date, '%Y-%m-%d').date()
                 import_form.books.append_entry(book)
             return render_template('import2.html', form=import_form)
