@@ -20,7 +20,7 @@ class BookForm(FlaskForm):
 
 class ImportForm(FlaskForm):
     books = FieldList(FormField(BookForm))
-    remove = SubmitField("REMOVE")
+    remove = SubmitField("REMOVE_LAST")
     submit = SubmitField("IMPORT")
 
 

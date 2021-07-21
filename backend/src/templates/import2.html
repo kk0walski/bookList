@@ -4,6 +4,10 @@
 <div class="row">
     <form action="" method="post" novalidate>
         {{ form.hidden_tag() }}
+        {{ form.remove(class_="btn btn-danger") }}
+        {{ form.submit(class_="btn btn-primary") }}
+        <br />
+        <br />
         {% for book in form.books %}
         <div class="shadow-sm p-3 mb-5 bg-body rounded mb-4">
             {{ book.hidden_tag() }}
@@ -72,8 +76,6 @@
             </div>
         </div>
         {% endfor %}
-        {{ form.remove(class_="btn btn-danger") }}
-        {{ form.submit(class_="btn btn-primary") }}
     </form>
 </div>
 {% endblock %}
