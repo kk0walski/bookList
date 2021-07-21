@@ -10,7 +10,7 @@ pip install -r requirements.txt
 export FLASK_APP=backend/src/app.py
 flask run
 ```
-cd 
+
 ### Productin server
 ```
 gunicorn backend.src.app:app
