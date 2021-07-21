@@ -59,5 +59,65 @@ class TestForms(unittest.TestCase):
             db.session.add(book)
             db.session.commit()
 
+    def test_two_appends(self):
+        book = Book(title="Don Quixote", author="Miguel de Cervantes", date=datetime.date(2012, 11, 10),
+                    isbn="9788320717501",
+                    pages=100,
+                    language='fr',
+                    url="https://s3.eu-central-1.amazonaws.com/bootstrapbaymisc/blog/24_days_bootstrap/don_quixote.jpg"
+                    )
+        db.session.add(book)
+        db.session.commit()
+
+        self.assertEqual(db.session.query(Book).count(), 1)
+
+        book = Book(title="As I Lay Dying", author="William Faulkner", date=datetime.date(2012, 5, 10),
+                    isbn="9788320717509",
+                    pages=100,
+                    language='en',
+                    url="https://s3.eu-central-1.amazonaws.com/bootstrapbaymisc/blog/24_days_bootstrap/as_I_lay.jpg"
+                    )
+
+        db.session.add(book)
+        db.session.commit()
+
+        self.assertEqual(db.session.query(Book).count(), 2)
+
+    def test_three_appends(self):
+        book = Book(title="Don Quixote", author="Miguel de Cervantes", date=datetime.date(2012, 11, 10),
+                    isbn="9788320717501",
+                    pages=100,
+                    language='fr',
+                    url="https://s3.eu-central-1.amazonaws.com/bootstrapbaymisc/blog/24_days_bootstrap/don_quixote.jpg"
+                    )
+        db.session.add(book)
+        db.session.commit()
+
+        self.assertEqual(db.session.query(Book).count(), 1)
+
+        book = Book(title="As I Lay Dying", author="William Faulkner", date=datetime.date(2012, 5, 10),
+                    isbn="9788320717509",
+                    pages=100,
+                    language='en',
+                    url="https://s3.eu-central-1.amazonaws.com/bootstrapbaymisc/blog/24_days_bootstrap/as_I_lay.jpg"
+                    )
+
+        db.session.add(book)
+        db.session.commit()
+
+        self.assertEqual(db.session.query(Book).count(), 2)
+
+        book = Book(title="Things Fall Apart", author="Miguel de Cervantes", date=datetime.date(2012, 5, 25),
+                    isbn="9788320717514",
+                    pages=325,
+                    language='en',
+                    url="https://s3.eu-central-1.amazonaws.com/bootstrapbaymisc/blog/24_days_bootstrap/things_fall_apart.jpg"
+                    )
+
+        db.session.add(book)
+        db.session.commit()
+
+        self.assertEqual(db.session.query(Book).count(), 3)
+
     def tearDown(self):
         os.remove(DATABASE_PATH + TEST_DB)
