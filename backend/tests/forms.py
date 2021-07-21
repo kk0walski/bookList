@@ -1,7 +1,8 @@
+import datetime
 import os
 import unittest
 import warnings
-from src.forms import BookForm, BookFormSubmit, SearchForm, FilterForm
+from src.forms import BookForm, TestFilterForm
 from src.app import create_app
 
 PROJECT_PATH, _ = os.path.split(os.path.dirname(os.path.abspath(__file__)))
@@ -60,6 +61,14 @@ class TestForms(unittest.TestCase):
         self.assertFalse(book.validate())
         errors = book.errors.items()
         self.assertIn(('url', ['Invalid URL.']), errors)
+
+    def test_filter_form(self):
+        filter = TestFilterForm(startdate_field="2021-07-12",
+                                enddate_field="2021-07-05")
+        self.assertFalse(filter.validate())
+        errors = filter.errors.items()
+        self.assertIn(
+            ('enddate_field', ["End date must not be earlier than start date."]), errors)
 
     def tearDown(self):
         os.remove(DATABASE_PATH + TEST_DB)

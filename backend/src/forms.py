@@ -63,6 +63,22 @@ class SearchForm(FlaskForm):
     submit = SubmitField("IMPORT")
 
 
+class TestFilterForm(FlaskForm):
+    title = StringField("Title")
+    author = StringField("Author")
+    language = StringField("language")
+    startdate_field = DateField(
+        "Date from", format='%Y-%m-%d')
+    enddate_field = DateField(
+        "Date To", format='%Y-%m-%d')
+
+    def validate_enddate_field(form, field):
+        if form.startdate_field.data and form.enddate_field.data:
+            if field.data < form.startdate_field.data:
+                raise ValidationError(
+                    "End date must not be earlier than start date.")
+
+
 class FilterForm(FlaskForm):
     title = StringField("Title")
     author = StringField("Author")
