@@ -48,19 +48,13 @@ def get_books_dict(items):
 
 
 def list_to_dict(list):
-    if list:
-        return [(lambda d: d.update(isbn=key) or d)(val)
-                for (key, val) in list.items()]
-    else:
-        return None
+    return [(lambda d: d.update(isbn=key) or d)(val)
+            for (key, val) in list.items()]
 
 
 def None_at_top(books):
-    if books:
-        return list(filter(lambda x: x['url'] != None, books)) + list(
-            filter(lambda x: x['url'] == None, books))
-    else:
-        return None
+    return list(filter(lambda x: x['url'] != None, books)) + list(
+        filter(lambda x: x['url'] == None, books))
 
 
 def get_request(url):
@@ -69,9 +63,12 @@ def get_request(url):
         data = response.json()
         items = data['items']
         reasult = get_books_dict(items)
-        reasult_list = list_to_dict(reasult)
-        reasult_books = None_at_top(reasult_list)
-        return reasult_books
+        if reasult:
+            reasult_list = list_to_dict(reasult)
+            reasult_books = None_at_top(reasult_list)
+            return reasult_books
+        else:
+            return None
 
 
 def build_querystring(query):
