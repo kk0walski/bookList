@@ -57,7 +57,7 @@ def None_at_top(books):
         filter(lambda x: x['url'] == None, books))
 
 
-def get_request(url):
+def request(url):
     response = requests.get(url)
     if response.status_code == 200:
         data = response.json()
@@ -141,5 +141,5 @@ def append_books(query):
         return database_commit(import_form)
     else:
         url = 'https://www.googleapis.com/books/v1/volumes?' + query
-        books = get_request(url)
+        books = request(url)
         return render_books_form(import_form, books)
