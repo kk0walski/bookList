@@ -13,5 +13,6 @@ FLASK_ENV=development start-app
 
 ### Run tests
 ```
+cd backend
 python setup.py test
 ```

@@ -1,9 +1,11 @@
+import os
 import unittest
 import warnings
 from src.forms import BookForm, BookFormSubmit, SearchForm, FilterForm
 from src.app import create_app
 
-
+PROJECT_PATH, _ = os.path.split(os.path.dirname(os.path.abspath(__file__)))
+DATABASE_PATH = PROJECT_PATH + '/src/'
 TEST_DB = "test.db"
 
 
@@ -46,4 +48,4 @@ class TestAPI(unittest.TestCase):
         self.assertTrue(book.validate())
 
     def tearDown(self):
-        pass
+        os.remove(DATABASE_PATH + TEST_DB)

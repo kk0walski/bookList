@@ -1,9 +1,11 @@
+import os
 import warnings
 import urllib.request
 from src.app import create_app
 from flask_testing import LiveServerTestCase
 
-
+PROJECT_PATH, _ = os.path.split(os.path.dirname(os.path.abspath(__file__)))
+DATABASE_PATH = PROJECT_PATH + '/src/'
 TEST_DB = "test.db"
 
 
@@ -20,3 +22,6 @@ class MyTest(LiveServerTestCase):
     def test_server_is_up_and_running(self):
         response = urllib.request.urlopen(self.get_server_url())
         self.assertEqual(response.code, 200)
+
+    def tearDown(self):
+        pass

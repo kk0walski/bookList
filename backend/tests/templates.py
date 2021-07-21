@@ -1,8 +1,10 @@
+import os
 import warnings
 from src.app import create_app
 from flask_testing import TestCase
 
-
+PROJECT_PATH, _ = os.path.split(os.path.dirname(os.path.abspath(__file__)))
+DATABASE_PATH = PROJECT_PATH + '/src/'
 TEST_DB = "test.db"
 
 
@@ -42,3 +44,6 @@ class TestNotRenderTemplates(TestCase):
     def test_api(self):
         response = self.client.get("/api/books")
         self.assertEquals(response.json, {})
+
+    def tearDown(self):
+        os.remove(DATABASE_PATH + TEST_DB)
