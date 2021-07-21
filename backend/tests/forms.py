@@ -19,20 +19,28 @@ class TestAPI(unittest.TestCase):
         self.app_context.push()
         self.client = self.app.test_client()
 
-    def test_book_form(self):
+    def test_book_empty(self):
         book = BookForm()
         self.assertFalse(book.validate())
         errors = book.errors.items()
         self.assertIn(('isbn', ['This field is required.']), errors)
         self.assertIn(('title', ['This field is required.']), errors)
         self.assertIn(('author', ['This field is required.']), errors)
+
+    def test_book_with_isbn(self):
         book = BookForm(isbn="9788320717501")
         self.assertFalse(book.validate())
+        errors = book.errors.items()
         self.assertIn(('title', ['This field is required.']), errors)
         self.assertIn(('author', ['This field is required.']), errors)
+
+    def test_book_with_title_isbn(self):
         book = BookForm(isbn="9788320717501", title="Miguel de Cervantes")
         self.assertFalse(book.validate())
+        errors = book.errors.items()
         self.assertIn(('author', ['This field is required.']), errors)
+
+    def test_good_book(self):
         book = BookForm(isbn="9788320717501",
                         title="Miguel de Cervantes", author="Miguel de Cervantes")
         self.assertTrue(book.validate())
