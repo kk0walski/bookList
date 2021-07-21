@@ -28,11 +28,4 @@ def create_app(test_config=None):
         db.create_all()  # Create sql tables for our data models
     return app
 
-
-def run():
-    app = create_app()
-    app.run()
-
-
-if __name__ == "__main__":
-    run()
+app = create_app()
