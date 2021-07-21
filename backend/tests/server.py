@@ -24,4 +24,7 @@ class TestServer(LiveServerTestCase):
         self.assertEqual(response.code, 200)
 
     def tearDown(self):
-        pass
+        try:
+            os.remove(DATABASE_PATH + TEST_DB)
+        except FileNotFoundError:
+            pass
