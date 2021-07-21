@@ -8,7 +8,7 @@ DATABASE_PATH = PROJECT_PATH + '/src/'
 TEST_DB = "test.db"
 
 
-class TestNotRenderTemplates(TestCase):
+class TestTemplates(TestCase):
 
     render_templates = False
 

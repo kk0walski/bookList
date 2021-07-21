@@ -9,7 +9,7 @@ DATABASE_PATH = PROJECT_PATH + '/src/'
 TEST_DB = "test.db"
 
 
-class TestAPI(unittest.TestCase):
+class TestForms(unittest.TestCase):
 
     def setUp(self):
         warnings.simplefilter('ignore', category=DeprecationWarning)
