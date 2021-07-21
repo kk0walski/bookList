@@ -53,6 +53,15 @@ class BookFormSubmit(FlaskForm):
                 raise ValidationError('Invalid URL.')
 
 
+class TestSearchForm(FlaskForm):
+    search = StringField("Search")
+    title = StringField("Title")
+    author = StringField("Author")
+    publisher = StringField("Publisher")
+    subject = StringField("Subject")
+    isbn = StringField("ISBN", validators=[Regexp(r"^([A-Z]+:)?\d*$")])
+
+
 class SearchForm(FlaskForm):
     search = StringField("Search")
     title = StringField("Title")

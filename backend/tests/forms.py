@@ -2,7 +2,7 @@ import datetime
 import os
 import unittest
 import warnings
-from src.forms import BookForm, TestFilterForm
+from src.forms import BookForm, TestFilterForm, TestSearchForm
 from src.app import create_app
 
 PROJECT_PATH, _ = os.path.split(os.path.dirname(os.path.abspath(__file__)))
@@ -69,6 +69,25 @@ class TestForms(unittest.TestCase):
         errors = filter.errors.items()
         self.assertIn(
             ('enddate_field', ["End date must not be earlier than start date."]), errors)
+
+    def test_filter_form_good(self):
+        filter = TestFilterForm(enddate_field="2021-07-12",
+                                startdate_field="2021-07-05")
+        self.assertTrue(filter.validate())
+
+    def test_filter_optional(self):
+        filter = TestFilterForm()
+        self.assertTrue(filter.validate())
+
+    def test_wrong_isbn(self):
+        search = TestSearchForm(isbn="97883207175ab")
+        self.assertFalse(search.validate())
+        errors = search.errors.items()
+        self.assertIn(('isbn', ['Invalid input.']), errors)
+
+    def test_search_empty(self):
+        filter = TestSearchForm()
+        self.assertTrue(filter.validate())
 
     def tearDown(self):
         os.remove(DATABASE_PATH + TEST_DB)
