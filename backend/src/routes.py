@@ -50,16 +50,18 @@ def show_books():
     books = Book.query
     if form.validate_on_submit():
         query_data = {
-            'title': "%{}%".format(form.title.data) if form.title.data else form.title.data,
-            'author': "%{}%".format(form.author.data) if form.author.data else form.author.data,
+            'title': form.title.data,
+            'author': form.author.data,
             'language': form.language.data,
             'date_from': form.startdate_field.data,
             'date_to': form.enddate_field.data,
         }
         if query_data['title']:
-            books = books.filter(Book.title.like(query_data['title']))
+            books = books.filter(Book.title.like(
+                "%{}%".format(query_data['title'])))
         if query_data['author']:
-            books = books.filter(Book.author.like(query_data['author']))
+            books = books.filter(Book.author.like(
+                "%{}%".format(query_data['author'])))
         if query_data['language']:
             books = books.filter(Book.language == query_data['language'])
         if query_data['date_from']:
