@@ -35,12 +35,6 @@ class ImportForm(FlaskForm):
 class BookForm(BaseBookForm):
     submit = SubmitField("ADD/CHANGE")
 
-    def validate_url(form, field):
-        if field.data:
-            if not re.match(
-                    "^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$", field.data):
-                raise ValidationError('Invalid URL.')
-
 
 class BaseSearchForm(FlaskForm):
     search = StringField("Search")
