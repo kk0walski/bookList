@@ -4,6 +4,9 @@ from src.app import create_app
 from flask_testing import LiveServerTestCase
 
 
+TEST_DB = "test.db"
+
+
 class MyTest(LiveServerTestCase):
 
     def create_app(self):

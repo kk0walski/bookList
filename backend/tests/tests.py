@@ -30,6 +30,7 @@ class TestAPI(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         response = self.client.get('/api/books')
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, b'{}\n')
 
     def test_book_form(self):
         book = BookForm()
