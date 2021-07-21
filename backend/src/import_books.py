@@ -3,7 +3,6 @@ from flask import Blueprint, render_template, redirect
 from flask.helpers import url_for
 from .forms import SearchForm, ImportForm
 from urllib.parse import urlencode
-from flask import current_app
 from .model import Book, db
 import requests
 
@@ -120,7 +119,6 @@ def append_books(query):
             for book in books:
                 if book['date']:
                     new_date = fix_date(book['date'])
-                    current_app.logger.info(new_date)
                     book['date'] = datetime.strptime(
                         new_date, '%Y-%m-%d').date()
                 import_form.books.append_entry(book)

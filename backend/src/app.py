@@ -3,6 +3,7 @@ from flask import Flask
 
 from .import_books import import_books
 from .routes import static, books
+from .api import api
 from .model import db
 
 
@@ -18,6 +19,7 @@ def create_app(test_config=None):
         app.config.from_mapping(**test_config)
 
     app.register_blueprint(static)
+    app.register_blueprint(api)
     app.register_blueprint(books)
     app.register_blueprint(import_books)
 
