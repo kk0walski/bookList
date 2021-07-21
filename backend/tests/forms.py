@@ -1,7 +1,7 @@
 import os
 import unittest
 import warnings
-from src.forms import BookForm, TestFilterForm, TestSearchForm
+from src.forms import BaseBookForm, BaseFilterForm, BaseSearchForm
 from src.app import create_app
 
 PROJECT_PATH, _ = os.path.split(os.path.dirname(os.path.abspath(__file__)))
@@ -22,7 +22,7 @@ class TestForms(unittest.TestCase):
         self.client = self.app.test_client()
 
     def test_book_empty(self):
-        book = BookForm()
+        book = BaseBookForm()
         self.assertFalse(book.validate())
         errors = book.errors.items()
         self.assertIn(('isbn', ['This field is required.']), errors)
@@ -30,39 +30,39 @@ class TestForms(unittest.TestCase):
         self.assertIn(('author', ['This field is required.']), errors)
 
     def test_book_with_isbn(self):
-        book = BookForm(isbn="9788320717501")
+        book = BaseBookForm(isbn="9788320717501")
         self.assertFalse(book.validate())
         errors = book.errors.items()
         self.assertIn(('title', ['This field is required.']), errors)
         self.assertIn(('author', ['This field is required.']), errors)
 
     def test_book_with_title_isbn(self):
-        book = BookForm(isbn="9788320717501", title="Miguel de Cervantes")
+        book = BaseBookForm(isbn="9788320717501", title="Miguel de Cervantes")
         self.assertFalse(book.validate())
         errors = book.errors.items()
         self.assertIn(('author', ['This field is required.']), errors)
 
     def test_good_book(self):
-        book = BookForm(isbn="9788320717501",
-                        title="Miguel de Cervantes", author="Miguel de Cervantes")
+        book = BaseBookForm(isbn="9788320717501",
+                            title="Miguel de Cervantes", author="Miguel de Cervantes")
         self.assertTrue(book.validate())
 
     def test_wrong_isbn(self):
-        book = BookForm(isbn="97883207175ad",
-                        title="Miguel de Cervantes", author="Miguel de Cervantes")
+        book = BaseBookForm(isbn="97883207175ad",
+                            title="Miguel de Cervantes", author="Miguel de Cervantes")
         self.assertFalse(book.validate())
         errors = book.errors.items()
         self.assertIn(('isbn', ['Invalid input.']), errors)
 
     def test_wrong_url(self):
-        book = BookForm(isbn="9788320717501",
-                        title="Miguel de Cervantes", author="Miguel de Cervantes", url="wrong")
+        book = BaseBookForm(isbn="9788320717501",
+                            title="Miguel de Cervantes", author="Miguel de Cervantes", url="wrong")
         self.assertFalse(book.validate())
         errors = book.errors.items()
         self.assertIn(('url', ['Invalid URL.']), errors)
 
     def test_filter_form(self):
-        filter = TestFilterForm(startdate_field="2021-07-12",
+        filter = BaseFilterForm(startdate_field="2021-07-12",
                                 enddate_field="2021-07-05")
         self.assertFalse(filter.validate())
         errors = filter.errors.items()
@@ -70,22 +70,22 @@ class TestForms(unittest.TestCase):
             ('enddate_field', ["End date must not be earlier than start date."]), errors)
 
     def test_filter_form_good(self):
-        filter = TestFilterForm(enddate_field="2021-07-12",
+        filter = BaseFilterForm(enddate_field="2021-07-12",
                                 startdate_field="2021-07-05")
         self.assertTrue(filter.validate())
 
     def test_filter_optional(self):
-        filter = TestFilterForm()
+        filter = BaseFilterForm()
         self.assertTrue(filter.validate())
 
     def test_wrong_isbn(self):
-        search = TestSearchForm(isbn="97883207175ab")
+        search = BaseSearchForm(isbn="97883207175ab")
         self.assertFalse(search.validate())
         errors = search.errors.items()
         self.assertIn(('isbn', ['Invalid input.']), errors)
 
     def test_search_empty(self):
-        filter = TestSearchForm()
+        filter = BaseSearchForm()
         self.assertTrue(filter.validate())
 
     def tearDown(self):

@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for
-from .forms import FilterForm, BookFormSubmit
+from .forms import FilterForm, BookForm
 from flask_paginate import Pagination, get_page_args
 from .model import Book, db
 
@@ -16,7 +16,7 @@ def index():
 @books.route('/edit/<string:isbn>', methods=["POST", "GET"])
 def book(isbn):
     book = Book.query.filter_by(isbn=isbn).first()
-    form = BookFormSubmit(obj=book)
+    form = BookForm(obj=book)
     if form.validate_on_submit():
         new_book = Book(isbn=form.isbn.data, author=form.author.data, title=form.title.data,
                         date=form.date.data, pages=form.pages.data, url=form.url.data,
@@ -29,7 +29,7 @@ def book(isbn):
 
 @books.route('/add', methods=["POST", "GET"])
 def add_book():
-    form = BookFormSubmit()
+    form = BookForm()
     if form.validate_on_submit():
         book = Book(isbn=form.isbn.data, author=form.author.data, title=form.title.data,
                     date=form.date.data, pages=form.pages.data, url=form.url.data,
