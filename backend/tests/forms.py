@@ -47,5 +47,19 @@ class TestForms(unittest.TestCase):
                         title="Miguel de Cervantes", author="Miguel de Cervantes")
         self.assertTrue(book.validate())
 
+    def test_wrong_isbn(self):
+        book = BookForm(isbn="97883207175ad",
+                        title="Miguel de Cervantes", author="Miguel de Cervantes")
+        self.assertFalse(book.validate())
+        errors = book.errors.items()
+        self.assertIn(('isbn', ['Invalid input.']), errors)
+
+    def test_wrong_url(self):
+        book = BookForm(isbn="9788320717501",
+                        title="Miguel de Cervantes", author="Miguel de Cervantes", url="wrong")
+        self.assertFalse(book.validate())
+        errors = book.errors.items()
+        self.assertIn(('url', ['Invalid URL.']), errors)
+
     def tearDown(self):
         os.remove(DATABASE_PATH + TEST_DB)

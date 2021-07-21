@@ -1,6 +1,8 @@
+import re
+from flask import current_app
 from flask_wtf import FlaskForm
 from wtforms import SubmitField, StringField, FieldList, FormField
-from wtforms.validators import DataRequired, ValidationError, Regexp, Optional, URL
+from wtforms.validators import DataRequired, ValidationError, Regexp, Optional, ValidationError
 from wtforms.fields.html5 import URLField, DateField, IntegerField, URLField
 
 
@@ -12,10 +14,16 @@ class BookForm(FlaskForm):
     date = DateField("Publication date",
                      format='%Y-%m-%d', validators=[Optional()])
     pages = IntegerField("Pages number", validators=[Optional()])
-    url = URLField("frontPage", validators=[URL(), Optional()], render_kw={
+    url = URLField("frontPage", render_kw={
         "placeholder": "http://www.example.com"})
     language = StringField("Language", render_kw={
         "placeholder": "un"})
+
+    def validate_url(form, field):
+        if form.url.data:
+            if not re.match(
+                    "^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$", field.data):
+                raise ValidationError('Invalid URL.')
 
 
 class ImportForm(FlaskForm):
@@ -32,11 +40,17 @@ class BookFormSubmit(FlaskForm):
     date = DateField("Publication date",
                      format='%Y-%m-%d', validators=[Optional()])
     pages = IntegerField("Pages number", validators=[Optional()])
-    url = URLField("frontPage", validators=[URL(), Optional()], render_kw={
+    url = URLField("frontPage", render_kw={
         "placeholder": "http://www.example.com"})
     language = StringField("Language", render_kw={
         "placeholder": "un"})
     submit = SubmitField("ADD/CHANGE")
+
+    def validate_url(form, field):
+        if field.data:
+            if not re.match(
+                    "^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$", field.data):
+                raise ValidationError('Invalid URL.')
 
 
 class SearchForm(FlaskForm):
