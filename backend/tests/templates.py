@@ -47,7 +47,7 @@ class TestTemplates(TestCase):
         response = self.client.get("/api/books")
         self.assertEquals(response.json, {})
 
-    def test_post(self):
+    def test_filtering(self):
         app = self.create_app()
         book = dict(title="Don Quixote", author="Miguel de Cervantes", date=datetime.date(2012, 11, 10),
             isbn="9788320717501",
@@ -83,6 +83,23 @@ class TestTemplates(TestCase):
             )
             self.assert_template_used('books.html')
             self.assertContext('books', [])
+            self.assert200(response)
+
+            query_data = {
+                'title': "Don",
+                'author': None,
+                'language': None,
+                'date_from': None,
+                'date_to': None,
+            }
+            response = self.client.post(
+                "/books/",
+                data = query_data,
+                follow_redirects=True, 
+                headers = {"Content-Type":"application/x-www-form-urlencoded"}
+            )
+            self.assert_template_used('books.html')
+            self.assertContext('books', books)
             self.assert200(response)
 
     def test_post_wrong(self):
