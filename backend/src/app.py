@@ -31,7 +31,7 @@ def create_app(test_config=None):
 
 def run():
     app = create_app()
-    app.run(debug=True)
+    app.run()
 
 
 if __name__ == "__main__":
