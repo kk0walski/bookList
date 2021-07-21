@@ -68,6 +68,23 @@ class TestTemplates(TestCase):
             self.assertContext('books', books)
             self.assert200(response)
 
+            query_data = {
+                'title': "Hoobit",
+                'author': None,
+                'language': None,
+                'date_from': None,
+                'date_to': None,
+            }
+            response = self.client.post(
+                "/books/",
+                data = query_data,
+                follow_redirects=True, 
+                headers = {"Content-Type":"application/x-www-form-urlencoded"}
+            )
+            self.assert_template_used('books.html')
+            self.assertContext('books', [])
+            self.assert200(response)
+
     def test_post_wrong(self):
         app = self.create_app()
         with app.test_client() as c:
