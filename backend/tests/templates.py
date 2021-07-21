@@ -22,15 +22,19 @@ class TestNotRenderTemplates(TestCase):
     def test_index(self):
         response = self.client.get("/")
         self.assert_template_used('index.html')
+        self.assert200(response)
 
     def test_books(self):
         response = self.client.get("/books/")
         self.assert_template_used('books.html')
+        self.assert200(response)
 
     def test_book(self):
         response = self.client.get("/books/add")
         self.assert_template_used('book.html')
+        self.assert200(response)
 
     def test_import(self):
         response = self.client.get("/import/")
         self.assert_template_used('import.html')
+        self.assert200(response)
