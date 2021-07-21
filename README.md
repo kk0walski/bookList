@@ -5,7 +5,13 @@
 pip install -r requirements.txt
 ```
 
-### Run server
+### Development server
+```
+export FLASK_APP=backend/src/app.py
+flask run
+```
+cd 
+### Productin server
 ```
 gunicorn backend.src.app:app
 ```
@@ -15,3 +21,7 @@ gunicorn backend.src.app:app
 cd backend
 python setup.py test
 ```
+
+### Heroku address
+
+https://flask-book-list.herokuapp.com
