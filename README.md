@@ -2,13 +2,12 @@
 
 ### Install packages
 ```
-cd backend
-pip install -e .
+pip install -r requirements.txt
 ```
 
-### Run server in development mode
+### Run server
 ```
-FLASK_ENV=development start-app
+gunicorn backend.src.app:app
 ```
 
 ### Run tests
