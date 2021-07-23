@@ -44,7 +44,7 @@ class TestTemplates(TestCase):
         self.assert200(response)
 
     def test_api(self):
-        response = self.client.get("/api/books")
+        response = self.client.get("/api/")
         self.assertEquals(response.json, {})
 
     def test_filtering(self):
@@ -75,9 +75,9 @@ class TestTemplates(TestCase):
                 'date_from': None,
                 'date_to': None,
             }
-            response = self.client.post(
+            response = self.client.get(
                 "/books/",
-                data = query_data,
+                query_string = query_data,
                 follow_redirects=True, 
                 headers = {"Content-Type":"application/x-www-form-urlencoded"}
             )
@@ -92,9 +92,9 @@ class TestTemplates(TestCase):
                 'date_from': None,
                 'date_to': None,
             }
-            response = self.client.post(
+            response = self.client.get(
                 "/books/",
-                data = query_data,
+                query_string = query_data,
                 follow_redirects=True, 
                 headers = {"Content-Type":"application/x-www-form-urlencoded"}
             )

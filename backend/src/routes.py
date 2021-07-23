@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, render_template, redirect, url_for, current_app, request
+from flask import Blueprint, jsonify, render_template, redirect, url_for, request
 from .forms import FilterForm, BookForm
 from flask_paginate import Pagination, get_page_args
 from .model import Book, db
