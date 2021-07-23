@@ -115,7 +115,8 @@ def database_commit(import_form):
 
 
 def get_date(book_date):
-    if book_date and re.match(r"\d{4}-\d{2}-\d{2}", book_date):
+    date_reg = re.compile(r"\d{4}-\d{2}-\d{2}")
+    if book_date and date_reg.match(book_date):
         return datetime.strptime(book_date, '%Y-%m-%d').date()
     else:
         return None

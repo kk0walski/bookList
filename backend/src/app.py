@@ -2,8 +2,7 @@ import os
 from flask import Flask
 
 from .import_books import import_books
-from .routes import static, books
-from .api import api
+from .routes import static, books, api
 from .model import db
 
 

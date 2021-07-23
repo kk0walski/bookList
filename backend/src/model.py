@@ -35,7 +35,7 @@ class Book(db.Model):
             "isbn": self.isbn,
             "author": self.author,
             "title": self.title,
-            "date": self.date.isoformat(),
+            "date": self.date.isoformat() if self.date else None,
             "url": self.url,
             "lang": self.language
         }
